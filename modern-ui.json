@@ -1,0 +1,25 @@
+{
+  "style": "default",
+  "path": "src/components/modern-ui",
+  "theme": "default",
+  "typescript": true,
+  "tailwind": true,
+  "framework": "next",
+  "components": [
+    {
+      "name": "button",
+      "version": "latest",
+      "installedAt": "2026-01-29T13:18:20.784Z"
+    },
+    {
+      "name": "card",
+      "version": "latest",
+      "installedAt": "2026-01-29T13:18:22.762Z"
+    }
+  ],
+  "aliases": {
+    "cn": "@/lib/utils",
+    "hook": "@/hooks"
+  },
+  "tailwindVersion": "v4"
+}
