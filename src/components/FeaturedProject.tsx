@@ -50,7 +50,7 @@ export function FeaturedProject({ project, onOpenDetail }: { project: Project, o
                             <img src={project.image} alt={project.name} className="w-full h-full object-cover" />
                         ) : (
                             <div className="w-full h-full bg-surface flex items-center justify-center">
-                                <Zap className="w-16 h-16 text-primary animate-pulse" />
+                                <Zap className="w-16 h-16 text-primary" />
                             </div>
                         )}
                     </div>

@@ -41,16 +41,37 @@ export const PROJECTS_DATA: Project[] = [
     {
         id: "1",
         name: "Onionx Labs",
-        description: "Official creative laboratory building the future of the MultiversX NFT ecosystem with passion and innovation.",
+        description: "🧅 We are building OOX Marketplace on #MultiversX with our utility token $ONX",
         category: "NFTS Project",
         tags: ["Creative", "Ecosystem", "Lab"],
         status: "active",
-        links: { website: "https://multiversx.com", twitter: "https://twitter.com" },
+        links: {
+            website: "https://oox.art",
+            twitter: "https://x.com/onionxlabs",
+            discord: "https://discord.gg/WVSMrNzqNb",
+            telegram: "https://t.me/OnionXLabs"
+        },
         featured: true,
         featuredMonth: "January 2026",
         image: "/onionx-logo.jpg",
         bannerImage: "/onionx-banner.jpg",
-        ooxCollections: ["ONIONX-888888"],
+        ooxCollections: [
+            { label: "CHUBBY OnionX", url: "https://oox.art/marketplace/collections/CHBONX-3e0201" },
+            { label: "OnionX Cards", url: "https://oox.art/marketplace/collections/ONXCRDS-ab712e" }
+        ],
+        isDailyBuilder: true,
+        isVerifiedCreative: true
+    },
+    {
+        id: "boogas",
+        name: "Boogas",
+        description: "Official Boogas project on MultiversX. Join the craziest community and discover our unique digital collectibles.",
+        category: "NFTS Project",
+        tags: ["PFP", "Community", "Art"],
+        status: "active",
+        links: { twitter: "https://x.com/BoogasNFT" },
+        image: "/boogas-logo.jpg",
+        bannerImage: "/boogas-banner.jpg",
         isDailyBuilder: true,
         isVerifiedCreative: true
     },
@@ -83,14 +104,17 @@ export const PROJECTS_DATA: Project[] = [
     {
         id: "4",
         name: "ilCriptonauta",
-        description: "Independent artist exploring the MultiversX universe. Creating unique digital art that blends pop culture with blockchain innovation.",
+        description: "@OnionXLabs FOUNDER | ILLUSTRATOR - #Artemis collection | $EGLD Investor | visit OOX",
         category: "Independent Artists",
         tags: ["1/1 Art", "Illustrations", "Pop Culture"],
         status: "active",
-        links: { twitter: "https://twitter.com" },
+        links: { twitter: "https://x.com/ilcriptonauta" },
         image: "/criptonauta-logo.jpg",
         bannerImage: "/criptonauta-banner.jpg",
-        ooxCollections: ["CRIPTO-123456"]
+        ooxCollections: [
+            { label: "Artemis", url: "https://oox.art/marketplace/collections/ARTMIS-5ed14e" },
+            { label: "Fantastic Beasts", url: "https://oox.art/marketplace/collections/BEASTS-8b80de" }
+        ]
     },
     {
         id: "5",

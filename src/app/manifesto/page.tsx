@@ -2,7 +2,7 @@
 
 import { motion, Variants } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Sparkles, ShieldCheck, Zap, Heart, Globe, Eye } from "lucide-react";
+import { ArrowLeft, Sparkles, ShieldCheck, Hammer, Heart, Globe, Eye, ExternalLink } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/modern-ui/button";
 import { Card, CardDecoration } from "@/components/modern-ui/card";
@@ -100,7 +100,7 @@ export default function Manifesto() {
                             <Card variant="default" className="p-8 h-full space-y-6 border-border/50 group hover:border-accent/30 transition-all">
                                 <CardDecoration className="bg-accent/5" />
                                 <div className="w-12 h-12 bg-accent/10 rounded-2xl flex items-center justify-center">
-                                    <Zap className="w-6 h-6 text-accent" />
+                                    <Hammer className="w-6 h-6 text-accent" />
                                 </div>
                                 <h3 className="text-2xl font-bold text-text-primary">The Hub for Builders</h3>
                                 <p className="text-text-secondary leading-relaxed">
@@ -160,6 +160,54 @@ export default function Manifesto() {
                                     Start Exploring
                                 </Link>
                             </Button>
+                        </div>
+                    </motion.div>
+
+                    {/* OOX Marketplace Section */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="relative overflow-hidden bg-surface/20 rounded-[40px] border border-border p-8 md:p-12 hover:border-primary/20 transition-colors"
+                    >
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                            {/* Image Left */}
+                            <div className="relative group">
+                                <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                                <img
+                                    src="/oox-promo.png"
+                                    alt="OOX Marketplace"
+                                    className="relative w-full h-auto max-w-[400px] mx-auto drop-shadow-[0_0_30px_rgba(var(--primary),0.2)] group-hover:scale-105 transition-transform duration-500"
+                                />
+                            </div>
+
+                            {/* Text Right */}
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <h3 className="text-sm font-black uppercase tracking-[0.3em] text-primary">Native Marketplace</h3>
+                                    <h2 className="text-4xl md:text-5xl font-black text-text-primary leading-tight">
+                                        OOX Marketplace
+                                    </h2>
+                                </div>
+                                <p className="text-xl text-text-secondary leading-relaxed font-medium">
+                                    The simplest and fastest marketplace on MultiversX.
+                                    Discover, collect and trade your favorite NFTs with an
+                                    unmatched user experience.
+                                </p>
+                                <div className="pt-4">
+                                    <Button
+                                        variant="default"
+                                        size="lg"
+                                        asChild
+                                        className="rounded-2xl px-12 py-7 font-black shadow-xl shadow-primary/30 text-lg group/btn"
+                                    >
+                                        <a href="https://oox.art" target="_blank" rel="noopener noreferrer">
+                                            Open OOX
+                                            <ExternalLink className="ml-2 w-5 h-5 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                                        </a>
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                     </motion.div>
                 </div>

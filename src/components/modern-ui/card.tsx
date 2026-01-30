@@ -34,7 +34,14 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement>, Variant
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, childClassname, variant, size, ...props }, ref) => {
     return (
-      <div ref={ref} className={cn(cardVariants({ variant, size }), className)} {...props}>
+      <div
+        ref={ref}
+        className={cn(
+          cardVariants({ variant, size }),
+          className
+        )}
+        {...props}
+      >
         <div className={cn("relative z-10 not-prose", childClassname)}>{props.children}</div>
       </div>
     )

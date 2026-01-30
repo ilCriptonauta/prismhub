@@ -134,11 +134,25 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
                                     )}
                                 </div>
 
-                                {/* Description */}
+                                {/* Description with Parsing for Links and Bold */}
                                 <div className="pt-6 space-y-4">
                                     <h4 className="text-xs font-black uppercase tracking-[0.2em] text-text-tertiary">About</h4>
                                     <p className="text-lg text-text-secondary leading-relaxed">
-                                        {project.description}
+                                        {project.description.split(/(@OnionXLabs|OOX Marketplace|OOX|FOUNDER|ILLUSTRATOR)/g).map((part, i) => {
+                                            if (part === "@OnionXLabs") {
+                                                return <a key={i} href="https://x.com/onionxlabs" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{part}</a>;
+                                            }
+                                            if (part === "OOX Marketplace") {
+                                                return <a key={i} href="https://oox.art" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-bold">{part}</a>;
+                                            }
+                                            if (part === "OOX") {
+                                                return <a key={i} href="https://oox.art" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-bold">{part}</a>;
+                                            }
+                                            if (part === "FOUNDER" || part === "ILLUSTRATOR") {
+                                                return <strong key={i} className="text-text-primary">{part}</strong>;
+                                            }
+                                            return <span key={i}>{part}</span>;
+                                        })}
                                     </p>
                                 </div>
 
@@ -149,7 +163,7 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             {project.ooxCollections.map((item, index) => {
                                                 const isString = typeof item === "string";
-                                                const label = isString ? `OOX: ${item}` : item.label;
+                                                const label = isString ? item : item.label;
                                                 const href = isString
                                                     ? `https://oox.art/marketplace/collections/${item}`
                                                     : (item.url || `https://oox.art/marketplace/collections/${item.ticker}`);

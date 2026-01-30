@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { ExternalLink, Zap, ShieldCheck, Hammer } from "lucide-react";
 import { Card, CardBadge, CardDecoration } from "./modern-ui/card";
 import { Button } from "./modern-ui/button";
 import { Project } from "@/data/projects";
-import { ProjectDetailModal } from "./ProjectDetailModal";
 
 const XIcon = ({ className }: { className?: string }) => (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -14,28 +13,67 @@ const XIcon = ({ className }: { className?: string }) => (
     </svg>
 );
 
+const MotionCard = motion(Card);
+
 export function ProjectCard({ project, onOpenDetail }: { project: Project, onOpenDetail: () => void }) {
     const isArtist = project.category === "Independent Artists";
 
+    // Mouse position relative to the card for a subtle tilt
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+
+    // Smooth movement settings - Increased damping for stability
+    const mouseX = useSpring(x, { stiffness: 200, damping: 30 });
+    const mouseY = useSpring(y, { stiffness: 200, damping: 30 });
+
+    // Subtle rotation values - Reduced intensity for better compatibility
+    const rotateX = useTransform(mouseY, [-0.5, 0.5], [5, -5]);
+    const rotateY = useTransform(mouseX, [-0.5, 0.5], [-5, 5]);
+
+    function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+        const rect = event.currentTarget.getBoundingClientRect();
+        const mouseXRelative = (event.clientX - rect.left) / rect.width;
+        const mouseYRelative = (event.clientY - rect.top) / rect.height;
+
+        x.set(mouseXRelative - 0.5);
+        y.set(mouseYRelative - 0.5);
+    }
+
+    function handleMouseLeave() {
+        x.set(0);
+        y.set(0);
+    }
+
     return (
-        <Card
+        <MotionCard
             variant="interactive"
-            className="p-0 border-border/50 hover:border-primary/30 group"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{
+                rotateX,
+                rotateY,
+                perspective: "1000px",
+            }}
+            className="p-0 border-border/50 hover:border-primary/30 group will-change-transform"
             childClassname="p-0 h-full flex flex-col"
         >
             <CardDecoration className="bg-primary/5 shadow-inner" />
 
-            {/* Prism Refraction Effect on Hover */}
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-20">
-                <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-secondary/5 to-accent/5 mix-blend-overlay" />
+            {/* Prism Refraction Effect - Optimized */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-20 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10" />
                 <motion.div
-                    animate={{ x: ["-100%", "100%"] }}
-                    transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
-                    className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12"
+                    variants={{
+                        hover: { x: ["-100%", "100%"] }
+                    }}
+                    transition={{
+                        x: { repeat: Infinity, duration: 1.5, ease: "linear" }
+                    }}
+                    className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
                 />
             </div>
 
-            {/* Top Banner */}
+            {/* Top Banner Container */}
             <div className="relative h-32 w-full overflow-hidden">
                 {project.bannerImage ? (
                     <img
@@ -73,7 +111,6 @@ export function ProjectCard({ project, onOpenDetail }: { project: Project, onOpe
 
                 {/* Activity Badges */}
                 <div className="flex gap-1.5 mb-2">
-                    {/* Verified and Daily Builder badges shown for all as requested */}
                     <div title="Verified Creative" className="p-1.5 bg-background shadow-md border border-border rounded-lg group-hover:border-secondary/30 transition-colors">
                         <ShieldCheck className="w-4 h-4 text-secondary" />
                     </div>
@@ -96,20 +133,16 @@ export function ProjectCard({ project, onOpenDetail }: { project: Project, onOpe
 
                 {/* Footer: Learn More Button */}
                 <div className="pt-4 mt-auto">
-                    {project.ooxCollections && project.ooxCollections.length > 0 && (
-                        <div className="grid grid-cols-1 gap-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={onOpenDetail}
-                                className="w-full text-[10px] font-black h-9 border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all group/oox rounded-xl"
-                            >
-                                <span className="mx-auto text-primary">LEARN MORE</span>
-                            </Button>
-                        </div>
-                    )}
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={onOpenDetail}
+                        className="w-full text-[10px] font-black h-9 border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all group/oox rounded-xl"
+                    >
+                        <span className="mx-auto text-primary uppercase">LEARN MORE</span>
+                    </Button>
                 </div>
             </div>
-        </Card>
+        </MotionCard>
     );
 }
