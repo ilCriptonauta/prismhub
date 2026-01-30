@@ -52,7 +52,7 @@ export default function Manifesto() {
                         </Link>
 
                         <h1 className="text-5xl md:text-7xl font-black tracking-tight text-text-primary">
-                            PRISM <br />
+                            OOXHub <br />
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
                                 Manifesto
                             </span>
@@ -78,7 +78,7 @@ export default function Manifesto() {
                                 </div>
                                 <h3 className="text-2xl font-bold text-text-primary">Discovery</h3>
                                 <p className="text-text-secondary leading-relaxed">
-                                    PRISM HUB is the first art repository dedicated to the MultiversX ecosystem. We provide a single, premium destination to discover the most innovative NFTS projects and independent artists.
+                                    OOXHub is the first art repository dedicated to the MultiversX ecosystem. We provide a single, premium destination to discover the most innovative NFTS projects and independent artists.
                                 </p>
                             </Card>
                         </motion.div>
@@ -104,7 +104,7 @@ export default function Manifesto() {
                                 </div>
                                 <h3 className="text-2xl font-bold text-text-primary">The Hub for Builders</h3>
                                 <p className="text-text-secondary leading-relaxed">
-                                    We celebrate the "Real Builders" — those who build day after day. PRISM is more than a list; it's a testament to the continuous effort and innovation of our community.
+                                    We celebrate the "Real Builders" — those who build day after day. OOXHub is more than a list; it's a testament to the continuous effort and innovation of our community.
                                 </p>
                             </Card>
                         </motion.div>
@@ -134,11 +134,11 @@ export default function Manifesto() {
 
                         <div className="space-y-6 max-w-2xl mx-auto text-center md:text-left">
                             <h2 className="text-3xl md:text-5xl font-black text-text-primary">
-                                The PRISM Philosophy
+                                The OOXHub Philosophy
                             </h2>
                             <div className="space-y-6 text-lg text-text-secondary leading-relaxed font-medium">
                                 <p>
-                                    Prism is not just a tool; it's a lens through which we view the entire MultiversX creative spectrum. Just as a physical prism breaks light into its constituent colors, PRISM HUB takes the vast and complex world of NFTs and displays it in all its vibrant, organized glory.
+                                    OOXHub is not just a tool; it's a lens through which we view the entire MultiversX creative spectrum. Just as a physical prism breaks light into its constituent colors, OOXHub takes the vast and complex world of NFTs and displays it in all its vibrant, organized glory.
                                 </p>
                                 <p>
                                     We believe that every pixel tells a story and every smart contract is a piece of architecture. Our goal is to ensure these stories are told and this architecture is seen.

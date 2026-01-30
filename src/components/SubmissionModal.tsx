@@ -38,7 +38,7 @@ export function SubmissionModal({ isOpen, onClose }: { isOpen: boolean, onClose:
                     >
                         {/* Header */}
                         <div className="p-6 border-b border-border flex items-center justify-between">
-                            <h3 className="text-xl font-bold text-text-primary">Join the Prism</h3>
+                            <h3 className="text-xl font-bold text-text-primary">Join the OOXHub</h3>
                             <button onClick={onClose} className="p-2 hover:bg-surface-hover rounded-full transition-colors">
                                 <X className="w-5 h-5 text-text-secondary" />
                             </button>
@@ -50,7 +50,7 @@ export function SubmissionModal({ isOpen, onClose }: { isOpen: boolean, onClose:
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <div className="space-y-4 text-center mb-8">
                                         <p className="text-text-secondary">
-                                            Apply to have your NFT project featured on Prism. We select active, high-quality collections building on MultiversX.
+                                            Apply to have your NFT project featured on OOXHub. We select active, high-quality collections building on MultiversX.
                                         </p>
                                     </div>
 
@@ -60,7 +60,7 @@ export function SubmissionModal({ isOpen, onClose }: { isOpen: boolean, onClose:
                                             <input
                                                 required
                                                 type="text"
-                                                placeholder="e.g. Prism Art Collective"
+                                                placeholder="e.g. OOXArt Collective"
                                                 className="w-full px-4 py-3 bg-background border border-border rounded-xl focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none transition-all placeholder:text-text-tertiary"
                                             />
                                         </div>
@@ -70,7 +70,7 @@ export function SubmissionModal({ isOpen, onClose }: { isOpen: boolean, onClose:
                                             <input
                                                 required
                                                 type="text"
-                                                placeholder="e.g. PRISM-888888"
+                                                placeholder="e.g. OOX-888888"
                                                 className="w-full px-4 py-3 bg-background border border-border rounded-xl focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none transition-all placeholder:text-text-tertiary"
                                             />
                                         </div>
@@ -106,7 +106,7 @@ export function SubmissionModal({ isOpen, onClose }: { isOpen: boolean, onClose:
                                     <div className="space-y-2">
                                         <h4 className="text-2xl font-bold text-text-primary">Application Received!</h4>
                                         <p className="text-text-secondary">
-                                            Thank you for submitting your project. Our team will review it and get in touch if it's a fit for Prism.
+                                            Thank you for submitting your project. Our team will review it and get in touch if it's a fit for OOXHub.
                                         </p>
                                     </div>
                                     <Button variant="outline" className="rounded-xl w-full" onClick={onClose}>

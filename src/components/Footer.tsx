@@ -14,7 +14,7 @@ export function Footer() {
                     <div className="flex items-center gap-2">
                         <Logo className="w-8 h-8" />
                         <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                            PRISM HUB
+                            OOXHub
                         </span>
                     </div>
                     <p className="text-sm text-text-secondary leading-relaxed">
@@ -61,7 +61,7 @@ export function Footer() {
 
             <div className="max-w-7xl mx-auto pt-12 mt-12 border-t border-border/50 text-center">
                 <p className="text-xs text-text-tertiary">
-                    © {new Date().getFullYear()} PRISM HUB. Built for the MultiversX Community.
+                    © {new Date().getFullYear()} OOXHub. Built for the MultiversX Community.
                 </p>
             </div>
         </footer>

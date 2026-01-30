@@ -3,7 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
-  title: "PRISM HUB | MultiversX Ecosystem",
+  title: "OOXHub | MultiversX Ecosystem",
   description: "The ultimate HUB for all active projects on the MultiversX network.",
 };
 
