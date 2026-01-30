@@ -33,7 +33,7 @@ const TelegramIcon = ({ className }: { className?: string }) => (
 export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailModalProps) {
     if (!project) return null;
 
-    const isArtist = project.category === "Indipendent Artists";
+    const isArtist = project.category === "Independent Artists";
 
     return (
         <AnimatePresence>
@@ -147,19 +147,27 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
                                     <div className="pt-8 space-y-4">
                                         <h4 className="text-xs font-black uppercase tracking-[0.2em] text-text-tertiary">Marketplace Collections</h4>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            {project.ooxCollections.map((ticker) => (
-                                                <Button
-                                                    key={ticker}
-                                                    variant="outline"
-                                                    className="justify-between h-14 px-5 rounded-2xl border-primary/20 hover:border-primary group/oox"
-                                                    asChild
-                                                >
-                                                    <a href={`https://oox.art/marketplace/collections/${ticker}`} target="_blank" rel="noopener noreferrer">
-                                                        <span className="font-bold text-text-primary">OOX: {ticker}</span>
-                                                        <ExternalLink className="w-4 h-4 text-primary group-hover/oox:translate-x-1 group-hover/oox:-translate-y-1 transition-transform" />
-                                                    </a>
-                                                </Button>
-                                            ))}
+                                            {project.ooxCollections.map((item, index) => {
+                                                const isString = typeof item === "string";
+                                                const label = isString ? `OOX: ${item}` : item.label;
+                                                const href = isString
+                                                    ? `https://oox.art/marketplace/collections/${item}`
+                                                    : (item.url || `https://oox.art/marketplace/collections/${item.ticker}`);
+
+                                                return (
+                                                    <Button
+                                                        key={isString ? item : `${item.label}-${index}`}
+                                                        variant="outline"
+                                                        className="justify-between h-14 px-5 rounded-2xl border-primary/20 hover:border-primary group/oox"
+                                                        asChild
+                                                    >
+                                                        <a href={href} target="_blank" rel="noopener noreferrer">
+                                                            <span className="font-bold text-text-primary">{label}</span>
+                                                            <ExternalLink className="w-4 h-4 text-primary group-hover/oox:translate-x-1 group-hover/oox:-translate-y-1 transition-transform" />
+                                                        </a>
+                                                    </Button>
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                 )}

@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Search } from "lucide-react";
+import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { SearchAndFilters } from "@/components/SearchAndFilters";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -78,14 +79,14 @@ export default function Home() {
             className="space-y-6"
           >
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tight text-text-primary leading-[0.9]">
-              The Ultimate <br />
+              MultiversX <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
                 Creative Hub
               </span>
             </h1>
 
             <p className="text-xl md:text-3xl text-text-secondary max-w-3xl mx-auto font-medium leading-relaxed">
-              Authenticity and visibility for active NFT projects building day after day on MultiversX.
+              The first art repository to discover NFTS projects and artists on Multiversx.
             </p>
           </motion.div>
 
@@ -105,6 +106,17 @@ export default function Home() {
               className="rounded-2xl px-16 py-8 font-bold shadow-2xl shadow-primary/40 text-xl transition-all hover:scale-105 active:scale-95"
             >
               Discover
+            </Button>
+
+            <Button
+              variant="outline"
+              size="lg"
+              asChild
+              className="rounded-2xl px-16 py-8 font-bold border-border hover:bg-surface text-xl transition-all hover:scale-105 active:scale-95"
+            >
+              <Link href="/manifesto">
+                Manifesto
+              </Link>
             </Button>
           </motion.div>
         </div>

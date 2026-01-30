@@ -15,7 +15,7 @@ const XIcon = ({ className }: { className?: string }) => (
 );
 
 export function ProjectCard({ project, onOpenDetail }: { project: Project, onOpenDetail: () => void }) {
-    const isArtist = project.category === "Indipendent Artists";
+    const isArtist = project.category === "Independent Artists";
 
     return (
         <Card
