@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Sparkles, ShieldCheck, Zap, Heart, Globe, Eye } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
@@ -8,7 +8,7 @@ import { Button } from "@/components/modern-ui/button";
 import { Card, CardDecoration } from "@/components/modern-ui/card";
 
 export default function Manifesto() {
-    const containerVariants = {
+    const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -18,7 +18,7 @@ export default function Manifesto() {
         }
     };
 
-    const itemVariants = {
+    const itemVariants: Variants = {
         hidden: { opacity: 0, y: 30 },
         visible: {
             opacity: 1,
