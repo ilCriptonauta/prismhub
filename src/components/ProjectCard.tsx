@@ -49,12 +49,19 @@ export function ProjectCard({ project, onOpenDetail }: { project: Project, onOpe
             variant="interactive"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            whileHover="hover"
+            initial="initial"
+            whileTap={{ scale: 0.98 }}
+            variants={{
+                initial: { scale: 1, y: 0 },
+                hover: { scale: 1.02, y: -5 }
+            }}
             style={{
                 rotateX,
                 rotateY,
                 perspective: "1000px",
             }}
-            className="p-0 border-border/50 hover:border-primary/30 group will-change-transform"
+            className="p-0 border-border/50 hover:border-primary/30 group will-change-transform transition-colors duration-500"
             childClassname="p-0 h-full flex flex-col"
         >
             <CardDecoration className="bg-primary/5 shadow-inner" />
@@ -64,12 +71,17 @@ export function ProjectCard({ project, onOpenDetail }: { project: Project, onOpe
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10" />
                 <motion.div
                     variants={{
-                        hover: { x: ["-100%", "100%"] }
+                        hover: { x: ["-100%", "200%"] }
                     }}
                     transition={{
-                        x: { repeat: Infinity, duration: 1.5, ease: "linear" }
+                        x: {
+                            repeat: Infinity,
+                            duration: 1.2,
+                            ease: "easeInOut",
+                            repeatDelay: 0.5
+                        }
                     }}
-                    className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
+                    className="absolute inset-0 w-full bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-20"
                 />
             </div>
 

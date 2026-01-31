@@ -61,7 +61,7 @@ export function Footer() {
 
             <div className="max-w-7xl mx-auto pt-12 mt-12 border-t border-border/50 text-center">
                 <p className="text-xs text-text-tertiary">
-                    © {new Date().getFullYear()} OOXHub. Built for the MultiversX Community.
+                    © 2026 <a href="https://x.com/onionxlabs" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">OnionXLabs</a>. Built with ❤️ for the MultiversX Community.
                 </p>
             </div>
         </footer>

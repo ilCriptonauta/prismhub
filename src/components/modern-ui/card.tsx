@@ -12,7 +12,7 @@ const cardVariants = cva("group relative overflow-hidden rounded-xl transition-a
       destructive: "bg-destructive text-destructive-foreground",
       dashed: "bg-background border-1 border-dashed border-border",
       elevated: "bg-background border border-border shadow-lg",
-      interactive: "bg-background border border-border hover:scale-[1.01] hover:shadow-md",
+      interactive: "bg-background border border-border hover:shadow-md",
     },
     size: {
       default: "p-6",
