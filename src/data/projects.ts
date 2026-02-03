@@ -245,5 +245,24 @@ export const PROJECTS_DATA: Project[] = [
         ooxCollections: ["PROJECTX-000001"],
         isDailyBuilder: true,
         isVerifiedCreative: true
+    },
+    {
+        id: "13",
+        slug: "roboartlab",
+        name: "RoboArtLab",
+        description: "RoboArtLab is an independent digital artist exploring the intersection of art, technology, and identity. Working primarily with AI-generated imagery, RoboArtLab reinterprets iconic cultural symbols and classical artworks through a robotic lens, questioning what remains human in an increasingly synthetic world",
+        category: "Independent Artists",
+        tags: ["Digital Art", "AI", "Robotics"],
+        status: "active",
+        links: {
+            twitter: "https://x.com/roboartlab"
+        },
+        image: "/roboartlab-logo.png",
+        bannerImage: "/roboartlab-banner.jpg",
+        ooxCollections: [
+            { label: "RealityReload", url: "https://oox.art/marketplace/collections/LOAD-a69bf5" },
+            { label: "SURVIVING COCK ROACH", url: "https://oox.art/marketplace/collections/SCKR-89e191" }
+        ],
+        isVerifiedCreative: true
     }
 ];
