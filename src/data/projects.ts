@@ -16,6 +16,7 @@ export interface MarketplaceCollection {
 
 export interface Project {
     id: string;
+    slug: string;
     name: string;
     description: string;
     category: ProjectCategory;
@@ -40,6 +41,7 @@ export const CATEGORIES: ProjectCategory[] = ["NFTS Project", "Independent Artis
 export const PROJECTS_DATA: Project[] = [
     {
         id: "1",
+        slug: "onionx-labs",
         name: "Onionx Labs",
         description: "🧅 We are building OOX Marketplace on #MultiversX with our utility token $ONX",
         category: "NFTS Project",
@@ -64,6 +66,7 @@ export const PROJECTS_DATA: Project[] = [
     },
     {
         id: "boogas",
+        slug: "boogas",
         name: "Boogas",
         description: "Official Boogas project on MultiversX. Join the craziest community and discover our unique digital collectibles.",
         category: "NFTS Project",
@@ -77,6 +80,7 @@ export const PROJECTS_DATA: Project[] = [
     },
     {
         id: "2",
+        slug: "owlking7",
         name: "OwlKing7",
         description: "Visionary independent artist pushing the boundaries of pixel art and digital identity on MultiversX.",
         category: "Independent Artists",
@@ -90,6 +94,7 @@ export const PROJECTS_DATA: Project[] = [
     },
     {
         id: "3",
+        slug: "baxc-dao-nerds",
         name: "BAXC DAO & Nerds",
         description: "The premier DAO and community for the bored and the brilliant on MultiversX. Building the future of the moon since 2022.",
         category: "NFTS Project",
@@ -103,6 +108,7 @@ export const PROJECTS_DATA: Project[] = [
     },
     {
         id: "4",
+        slug: "ilcriptonauta",
         name: "ilCriptonauta",
         description: "@OnionXLabs FOUNDER | ILLUSTRATOR - #Artemis collection | $EGLD Investor | visit OOX",
         category: "Independent Artists",
@@ -118,6 +124,7 @@ export const PROJECTS_DATA: Project[] = [
     },
     {
         id: "5",
+        slug: "eapes",
         name: "EAPES",
         description: "The most vibrant community on MultiversX. Building tools, art and value for every holder through extreme innovation.",
         category: "NFTS Project",
@@ -130,6 +137,7 @@ export const PROJECTS_DATA: Project[] = [
     },
     {
         id: "6",
+        slug: "super-rare-bears",
         name: "Super RARE Bears",
         description: "Let's make RARE tasty again. A elite collection of legendary bears building the next frontier of NFT utility on MultiversX.",
         category: "NFTS Project",
@@ -146,6 +154,7 @@ export const PROJECTS_DATA: Project[] = [
     },
     {
         id: "7",
+        slug: "cuget",
         name: "Cuget",
         description: "Independent creator and visual artist bringing a unique perspective to the MultiversX ecosystem through vibrant digital expressions.",
         category: "Independent Artists",
@@ -159,6 +168,7 @@ export const PROJECTS_DATA: Project[] = [
     },
     {
         id: "8",
+        slug: "versus-projects",
         name: "Versus Projects",
         description: "A legendary collection of fantasy characters and mystical creatures, building a competitive and immersive ecosystem on MultiversX.",
         category: "NFTS Project",
@@ -171,6 +181,7 @@ export const PROJECTS_DATA: Project[] = [
     },
     {
         id: "9",
+        slug: "hodl-token-club",
         name: "Hodl Token Club",
         description: "Holders of Empyreans gain access into a visionary community, access our daily $1,000 REWARD draw, surprise bonuses and club perks. Every Empyrean minted with the rare $HODL trait receives an airdrop of 1 $HODL. Keep your Empyrean in-wallet to earn weekly $REWARD, with higher yields for rarer traits.",
         category: "NFTS Project",
@@ -192,6 +203,7 @@ export const PROJECTS_DATA: Project[] = [
     },
     {
         id: "10",
+        slug: "supervictor-universe",
         name: "SuperVictor Universe",
         description: "A colorful and vibrant universe of characters and adventures building a joyful community on MultiversX. Join the ultimate quest for creativity and fun.",
         category: "NFTS Project",
@@ -206,6 +218,7 @@ export const PROJECTS_DATA: Project[] = [
     },
     {
         id: "11",
+        slug: "temoana",
         name: "Temoana",
         description: "Independent artist catching waves and creating vibrant digital art that blends surf culture with a unique tropical aesthetic on MultiversX.",
         category: "Independent Artists",
@@ -220,6 +233,7 @@ export const PROJECTS_DATA: Project[] = [
     },
     {
         id: "12",
+        slug: "project-x-dao",
         name: "Project X DAO",
         description: "A visionary DAO building the future of decentralized governance and community-driven innovation on MultiversX. Join the evolution.",
         category: "NFTS Project",

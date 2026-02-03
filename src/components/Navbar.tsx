@@ -29,6 +29,14 @@ export function Navbar() {
 
                     <div className="flex items-center gap-4">
                         <Button
+                            asChild
+                            className="bg-gradient-to-r from-primary to-secondary text-white hover:opacity-90 font-semibold transition-all shadow-md hover:shadow-lg"
+                        >
+                            <a href="https://oox.art" target="_blank" rel="noopener noreferrer">
+                                Open OOX
+                            </a>
+                        </Button>
+                        <Button
                             variant="outline"
                             size="icon"
                             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}

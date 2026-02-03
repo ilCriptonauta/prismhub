@@ -1,10 +1,11 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ExternalLink, ShieldCheck, Hammer, Zap, Globe } from "lucide-react";
+import { X, ExternalLink, ShieldCheck, Hammer, Zap, Globe, Share2, Check } from "lucide-react";
 import { Project } from "@/data/projects";
 import { Button } from "./modern-ui/button";
 import { CardBadge } from "./modern-ui/card";
+import { useState } from "react";
 
 interface ProjectDetailModalProps {
     project: Project | null;
@@ -31,9 +32,18 @@ const TelegramIcon = ({ className }: { className?: string }) => (
 );
 
 export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailModalProps) {
+    const [copied, setCopied] = useState(false);
+
     if (!project) return null;
 
     const isArtist = project.category === "Independent Artists";
+
+    const handleShare = () => {
+        const url = `${window.location.origin}${isArtist ? '/artist/' : '/project/'}${project.slug}`;
+        navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     return (
         <AnimatePresence>
@@ -69,7 +79,7 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
                             {/* Close Button */}
                             <button
                                 onClick={onClose}
-                                className="absolute top-4 right-4 p-2 bg-background/50 hover:bg-background/80 backdrop-blur-md rounded-full text-text-primary transition-colors z-50"
+                                className="absolute top-4 right-4 p-2 bg-background/50 hover:bg-background/80 backdrop-blur-md rounded-full text-text-primary transition-colors z-50 transform hover:scale-110 active:scale-95"
                             >
                                 <X className="w-6 h-6" />
                             </button>
@@ -90,6 +100,17 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
                                 </div>
 
                                 <div className="flex gap-2">
+                                    <button
+                                        onClick={handleShare}
+                                        className="p-2 bg-background shadow-md border border-border rounded-xl text-primary hover:bg-surface transition-all active:scale-95 flex items-center gap-2 group"
+                                        title="Share Profile"
+                                    >
+                                        {copied ? (
+                                            <Check className="w-6 h-6 text-success" />
+                                        ) : (
+                                            <Share2 className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
+                                        )}
+                                    </button>
                                     <div title="Verified Creative" className="p-2 bg-background shadow-md border border-border rounded-xl">
                                         <ShieldCheck className="w-6 h-6 text-secondary" />
                                     </div>

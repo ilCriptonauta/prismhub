@@ -7,6 +7,7 @@ import { Project } from "@/data/projects";
 import { Button } from "./modern-ui/button";
 import { CardBadge } from "./modern-ui/card";
 import { ProjectDetailModal } from "./ProjectDetailModal";
+import Link from "next/link";
 
 const XIcon = ({ className }: { className?: string }) => (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -14,8 +15,11 @@ const XIcon = ({ className }: { className?: string }) => (
     </svg>
 );
 
-export function FeaturedProject({ project, onOpenDetail }: { project: Project, onOpenDetail: () => void }) {
+export function FeaturedProject({ project }: { project: Project }) {
     if (!project) return null;
+
+    const isArtist = project.category === "Independent Artists";
+    const path = isArtist ? `/artist/${project.slug}` : `/project/${project.slug}`;
 
     return (
         <motion.div
@@ -87,10 +91,12 @@ export function FeaturedProject({ project, onOpenDetail }: { project: Project, o
                         <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-4">
                             <Button
                                 size="lg"
+                                asChild
                                 className="rounded-xl px-10 shadow-lg shadow-primary/25"
-                                onClick={onOpenDetail}
                             >
-                                LEARN MORE <ExternalLink className="ml-2 w-4 h-4" />
+                                <Link href={path}>
+                                    LEARN MORE <ExternalLink className="ml-2 w-4 h-4" />
+                                </Link>
                             </Button>
 
                             {project.links.twitter && (

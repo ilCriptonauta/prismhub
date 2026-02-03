@@ -7,6 +7,8 @@ import { Card, CardBadge, CardDecoration } from "./modern-ui/card";
 import { Button } from "./modern-ui/button";
 import { Project } from "@/data/projects";
 
+import Link from "next/link";
+
 const XIcon = ({ className }: { className?: string }) => (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
         <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932zm-1.294 19.486h2.039L6.482 2.395h-2.19l13.315 18.244z" />
@@ -15,8 +17,9 @@ const XIcon = ({ className }: { className?: string }) => (
 
 const MotionCard = motion(Card);
 
-export function ProjectCard({ project, onOpenDetail }: { project: Project, onOpenDetail: () => void }) {
+export function ProjectCard({ project }: { project: Project }) {
     const isArtist = project.category === "Independent Artists";
+    const path = isArtist ? `/artist/${project.slug}` : `/project/${project.slug}`;
 
     // Mouse position relative to the card for a subtle tilt
     const x = useMotionValue(0);
@@ -148,10 +151,12 @@ export function ProjectCard({ project, onOpenDetail }: { project: Project, onOpe
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={onOpenDetail}
+                        asChild
                         className="w-full text-[10px] font-black h-9 border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all group/oox rounded-xl"
                     >
-                        <span className="mx-auto text-primary uppercase">LEARN MORE</span>
+                        <Link href={path}>
+                            <span className="mx-auto text-primary uppercase">LEARN MORE</span>
+                        </Link>
                     </Button>
                 </div>
             </div>
