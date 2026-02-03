@@ -264,5 +264,25 @@ export const PROJECTS_DATA: Project[] = [
             { label: "SURVIVING COCK ROACH", url: "https://oox.art/marketplace/collections/SCKR-89e191" }
         ],
         isVerifiedCreative: true
+    },
+    {
+        id: "14",
+        slug: "olive",
+        name: "Olive",
+        description: "The official Olive project on MultiversX. Building a strong community and ecosystem centered around creativity, growth, and the power of the grove.",
+        category: "NFTS Project",
+        tags: ["Community", "Ecosystem", "Art"],
+        status: "active",
+        links: {
+            twitter: "https://x.com/OliveMVX",
+            website: "https://linktr.ee/olivedao"
+        },
+        image: "/olive-logo.jpg",
+        ooxCollections: [
+            { label: "OliveGrove", url: "https://oox.art/marketplace/collections/OLVGROVE-90fae5" },
+            { label: "OlivePantheon", url: "https://oox.art/marketplace/collections/OLVP-e06a55" }
+        ],
+        isDailyBuilder: true,
+        isVerifiedCreative: true
     }
 ];
