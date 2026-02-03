@@ -145,7 +145,7 @@ export const PROJECTS_DATA: Project[] = [
         status: "active",
         links: { website: "https://multiversx.com", twitter: "https://twitter.com" },
         image: "/srb-logo.png",
-        bannerImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000",
+        bannerImage: "/srb-banner.png",
         ooxCollections: ["SRB-999999"],
         colors: {
             primary: "#FFD700", // Gold
