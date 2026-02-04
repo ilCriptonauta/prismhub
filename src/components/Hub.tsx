@@ -66,14 +66,14 @@ export function Hub() {
                         className="space-y-6"
                     >
                         <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tight text-text-primary leading-[0.9]">
-                            MultiversX <br />
+                            Collective <br />
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
-                                Creative Hub
+                                Creative Evolution
                             </span>
                         </h1>
 
                         <p className="text-xl md:text-3xl text-text-secondary max-w-3xl mx-auto font-medium leading-relaxed">
-                            The first art repository to discover NFTS projects and artists on Multiversx.
+                            The first art repository to discover digital art on Multiversx.
                         </p>
                     </motion.div>
 

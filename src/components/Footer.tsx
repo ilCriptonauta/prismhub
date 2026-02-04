@@ -18,7 +18,7 @@ export function Footer() {
                         </span>
                     </div>
                     <p className="text-sm text-text-secondary leading-relaxed">
-                        The ultimate Creative Hub for MultiversX NFT projects and independent artists. Building authenticity day after day.
+                        The ultimate Creative Hub for MultiversX NFT projects and artists. Building authenticity day after day.
                     </p>
                 </div>
 

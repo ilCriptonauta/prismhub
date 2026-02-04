@@ -1,5 +1,5 @@
 export type ProjectStatus = "active" | "developing" | "minting";
-export type ProjectCategory = "NFTS Project" | "Independent Artists";
+export type ProjectCategory = "NFTS Project" | "Artists";
 
 export interface ProjectLinks {
     website?: string;
@@ -36,7 +36,7 @@ export interface Project {
     };
 }
 
-export const CATEGORIES: ProjectCategory[] = ["NFTS Project", "Independent Artists"];
+export const CATEGORIES: ProjectCategory[] = ["NFTS Project", "Artists"];
 
 export const PROJECTS_DATA: Project[] = [
     {
@@ -68,11 +68,15 @@ export const PROJECTS_DATA: Project[] = [
         id: "boogas",
         slug: "boogas",
         name: "Boogas",
-        description: "Official Boogas project on MultiversX. Join the craziest community and discover our unique digital collectibles.",
+        description: "Put a bounce in your step!",
         category: "NFTS Project",
         tags: ["PFP", "Community", "Art"],
         status: "active",
-        links: { twitter: "https://x.com/BoogasNFT" },
+        links: {
+            twitter: "https://x.com/Boogas",
+            telegram: "https://t.me/BoogasPortal",
+            website: "https://boogas.io/"
+        },
         image: "/boogas-logo.jpg",
         bannerImage: "/boogas-banner.jpg",
         isDailyBuilder: true,
@@ -83,7 +87,7 @@ export const PROJECTS_DATA: Project[] = [
         slug: "owlking7",
         name: "OwlKing7",
         description: "Visionary independent artist pushing the boundaries of pixel art and digital identity on MultiversX.",
-        category: "Independent Artists",
+        category: "Artists",
         tags: ["Pixel Art", "Digital Identity", "Fine Art"],
         status: "active",
         links: { website: "https://multiversx.com", twitter: "https://twitter.com" },
@@ -96,14 +100,21 @@ export const PROJECTS_DATA: Project[] = [
         id: "3",
         slug: "baxc-dao-nerds",
         name: "BAXC DAO & Nerds",
-        description: "The premier DAO and community for the bored and the brilliant on MultiversX. Building the future of the moon since 2022.",
+        description: "BAXC is a manually drawn collection made for holders to bring extra adoption on MultiversX.",
         category: "NFTS Project",
         tags: ["DAO", "Community", "Nerds"],
         status: "active",
-        links: { twitter: "https://twitter.com", discord: "https://discord.com" },
+        links: {
+            twitter: "https://x.com/BoredApeXClub",
+            discord: "https://discord.gg/q2gTUaFh3V",
+            telegram: "https://t.me/BaxcNerdsTime"
+        },
         image: "/baxc-logo-v2.jpg",
         bannerImage: "/baxc-banner-new.jpg",
-        ooxCollections: ["BAXC-000001"],
+        ooxCollections: [
+            { label: "BAXC", url: "https://oox.art/marketplace/collections/BAXC-cdf74d" },
+            { label: "NERDS", url: "https://oox.art/marketplace/collections/NERD-794a0d" }
+        ],
         isDailyBuilder: true
     },
     {
@@ -111,7 +122,7 @@ export const PROJECTS_DATA: Project[] = [
         slug: "ilcriptonauta",
         name: "ilCriptonauta",
         description: "@OnionXLabs FOUNDER | ILLUSTRATOR - #Artemis collection | $EGLD Investor | visit OOX",
-        category: "Independent Artists",
+        category: "Artists",
         tags: ["1/1 Art", "Illustrations", "Pop Culture"],
         status: "active",
         links: { twitter: "https://x.com/ilcriptonauta" },
@@ -126,44 +137,58 @@ export const PROJECTS_DATA: Project[] = [
         id: "5",
         slug: "eapes",
         name: "EAPES",
-        description: "The most vibrant community on MultiversX. Building tools, art and value for every holder through extreme innovation.",
+        description: "EAPES CLUB 🦍 | NFT project on Multiversx and Solana • Real Utility | Awarded “Best NFT Design\"",
         category: "NFTS Project",
         tags: ["Community", "PFP", "Innovation"],
         status: "active",
-        links: { website: "https://multiversx.com", twitter: "https://twitter.com" },
+        links: {
+            website: "https://www.eapes.com/",
+            twitter: "https://x.com/EAPESCLUB",
+            discord: "https://discord.gg/eapesclub"
+        },
         image: "/eapes-logo.jpg",
-        bannerImage: "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80&w=1000",
-        ooxCollections: ["EAPES-654321"]
+        bannerImage: "/eapes-banner.jpg",
+        ooxCollections: [
+            { label: "EAPES", url: "https://oox.art/marketplace/collections/EAPES-8f3c1f" },
+            { label: "N.A.N.A", url: "https://oox.art/marketplace/collections/NANA-3366e3" }
+        ]
     },
     {
         id: "6",
         slug: "super-rare-bears",
         name: "Super RARE Bears",
-        description: "Let's make RARE tasty again. A elite collection of legendary bears building the next frontier of NFT utility on MultiversX.",
+        description: "Always Bullish! $EGLD/$SOL/$SUI\n\n🐻 10K Genesis NFTs on MultiversX\n💼 Active In-wallet Staking\n\n💰 Stake $RARE, $FEDUP, $HYPE, $BATES, $DBATES & earn!\n\n🗳️ DAO Governance & Gaming\n🎁 Airdrops & Rewards\n⚙️ Powering DeFi, Automation, Utility & Community… Since 2022.",
         category: "NFTS Project",
         tags: ["PFP", "Utility", "Elite"],
         status: "active",
-        links: { website: "https://multiversx.com", twitter: "https://twitter.com" },
+        links: {
+            website: "https://superrarebears.com/",
+            twitter: "https://x.com/SuperRare_Bears",
+            telegram: "https://t.me/SuperRareBears",
+            discord: "https://discord.gg/y4EUxjNkSU"
+        },
         image: "/srb-logo.png",
         bannerImage: "/srb-banner.png",
-        ooxCollections: ["SRB-999999"],
-        colors: {
-            primary: "#FFD700", // Gold
-            secondary: "#FFA500" // Orange
-        }
+        ooxCollections: [
+            { label: "SuperRareBears", url: "https://oox.art/marketplace/collections/SRB-61daf7" },
+            { label: "HYPEY", url: "https://oox.art/marketplace/collections/HYPEY-794a10" }
+        ]
     },
     {
         id: "7",
         slug: "cuget",
         name: "Cuget",
-        description: "Independent creator and visual artist bringing a unique perspective to the MultiversX ecosystem through vibrant digital expressions.",
-        category: "Independent Artists",
+        description: "I'm Cuget. A starving Web3 artist grinding on MultiversX. Pixel, vector, and 3D art noob (still learning, always building). Passionate about Romanian folklore and dark mithology. Gamer at heart.",
+        category: "Artists",
         tags: ["Digital Art", "Visuals", "Creator"],
         status: "active",
-        links: { twitter: "https://twitter.com" },
+        links: { twitter: "https://x.com/Cuget_x" },
         image: "/cuget-logo.jpg",
-        bannerImage: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1000",
-        ooxCollections: ["CUGET-000001"],
+        bannerImage: "/cuget-banner.jpg",
+        ooxCollections: [
+            { label: "FRUGFRENS", url: "https://oox.art/marketplace/collections/FRUGFRENS-4c867c" },
+            { label: "Andrians", url: "https://oox.art/marketplace/collections/ANDRIANS-e6144d" }
+        ],
         isVerifiedCreative: true
     },
     {
@@ -205,14 +230,22 @@ export const PROJECTS_DATA: Project[] = [
         id: "10",
         slug: "supervictor-universe",
         name: "SuperVictor Universe",
-        description: "A colorful and vibrant universe of characters and adventures building a joyful community on MultiversX. Join the ultimate quest for creativity and fun.",
+        description: "A purpose driven universe",
         category: "NFTS Project",
         tags: ["Characters", "Adventure", "Art"],
         status: "active",
-        links: { twitter: "https://twitter.com" },
+        links: {
+            twitter: "https://x.com/SVictorUniverse",
+            discord: "https://discord.gg/Parwvs6vtp",
+            telegram: "https://t.me/VictorBySVU",
+            website: "https://supervictornft.com/"
+        },
         image: "/svu-logo.png",
         bannerImage: "/svu-banner.png",
-        ooxCollections: ["SVU-111111"],
+        ooxCollections: [
+            { label: "SuperVictor", url: "https://oox.art/marketplace/collections/SUPERVIC-f07785" },
+            { label: "B.E.E.F", url: "https://oox.art/marketplace/collections/BEEF-032185" }
+        ],
         isDailyBuilder: true,
         isVerifiedCreative: true
     },
@@ -220,14 +253,20 @@ export const PROJECTS_DATA: Project[] = [
         id: "11",
         slug: "temoana",
         name: "Temoana",
-        description: "Independent artist catching waves and creating vibrant digital art that blends surf culture with a unique tropical aesthetic on MultiversX.",
-        category: "Independent Artists",
-        tags: ["SurfArt", "Tropical", "DigitalArt"],
+        description: "Tahitian artist, I blend Polynesian culture and digital art to create unique and vibrant works. Through my creations, I share a modern and colorful vision of my island, a fusion of traditions, dreams, and pixels. Each piece is a bridge between the Mana of here and the world of tomorrow.",
+        category: "Artists",
+        tags: ["SurfArt", "Polynesian", "DigitalArt"],
         status: "active",
-        links: { twitter: "https://twitter.com" },
-        image: "/temoana-logo.jpg",
+        links: {
+            twitter: "https://x.com/TemoanaART",
+            website: "https://www.temoana.net/"
+        },
+        image: "/temoana-logo.png",
         bannerImage: "/temoana-banner.jpg",
-        ooxCollections: ["TEMOANA-111111"],
+        ooxCollections: [
+            { label: "TEMOANA", url: "https://oox.art/marketplace/collections/TEMOANA-a350a1" },
+            { label: "Temoana Lost Artifacts", url: "https://oox.art/marketplace/collections/TMLA-08844c" }
+        ],
         isDailyBuilder: true,
         isVerifiedCreative: true
     },
@@ -235,14 +274,22 @@ export const PROJECTS_DATA: Project[] = [
         id: "12",
         slug: "project-x-dao",
         name: "Project X DAO",
-        description: "A visionary DAO building the future of decentralized governance and community-driven innovation on MultiversX. Join the evolution.",
+        description: "#1 Rev-share DAO on MultiversX. Validator. Builders of tools for users and builders alike. We are MultiversX!",
         category: "NFTS Project",
         tags: ["DAO", "Ecosystem", "Building"],
         status: "active",
-        links: { twitter: "https://twitter.com" },
+        links: {
+            twitter: "https://x.com/ProjectX_DAO",
+            discord: "https://discord.gg/C3z6FM7xDW",
+            telegram: "https://t.me/ProjectX_DAO",
+            website: "https://projectx.mx/"
+        },
         image: "/projectx-logo.jpg",
         bannerImage: "/projectx-banner.jpg",
-        ooxCollections: ["PROJECTX-000001"],
+        ooxCollections: [
+            { label: "SubjectX", url: "https://oox.art/marketplace/collections/SUBJECTX-2c184d" },
+            { label: "TITANS", url: "https://oox.art/marketplace/collections/TITANS-20bc2c" }
+        ],
         isDailyBuilder: true,
         isVerifiedCreative: true
     },
@@ -251,7 +298,7 @@ export const PROJECTS_DATA: Project[] = [
         slug: "roboartlab",
         name: "RoboArtLab",
         description: "RoboArtLab is an independent digital artist exploring the intersection of art, technology, and identity. Working primarily with AI-generated imagery, RoboArtLab reinterprets iconic cultural symbols and classical artworks through a robotic lens, questioning what remains human in an increasingly synthetic world",
-        category: "Independent Artists",
+        category: "Artists",
         tags: ["Digital Art", "AI", "Robotics"],
         status: "active",
         links: {
@@ -278,9 +325,98 @@ export const PROJECTS_DATA: Project[] = [
             website: "https://linktr.ee/olivedao"
         },
         image: "/olive-logo.jpg",
+        bannerImage: "/olive-banner.jpg",
         ooxCollections: [
             { label: "OliveGrove", url: "https://oox.art/marketplace/collections/OLVGROVE-90fae5" },
             { label: "OlivePantheon", url: "https://oox.art/marketplace/collections/OLVP-e06a55" }
+        ],
+        isDailyBuilder: true,
+        isVerifiedCreative: true
+    },
+    {
+        id: "15",
+        slug: "galacticx",
+        name: "GalacticX",
+        description: "GalacticX is more than football — it’s a new way to live the game. Through GalacticX NFTs and Web3-powered football experiences, members can truly own a piece of the sport they love. We bring the global football community together with exclusive events, interactive contests, and competitions built on innovation and engagement. GalacticX connects passion, technology, and ownership, transforming fans from spectators into active participants in the future of football.",
+        category: "NFTS Project",
+        tags: ["Football", "Sports", "Web3"],
+        status: "active",
+        links: {
+            twitter: "https://x.com/_Galactic_x",
+            telegram: "https://t.me/GalacticXfootball"
+        },
+        image: "/galacticx-logo.png",
+        bannerImage: "/galacticx-banner.jpg",
+        ooxCollections: [
+            { label: "MainSeason", url: "https://oox.art/marketplace/collections/MAINSEASON-3db9f8" },
+            { label: "GalacticXpixel", url: "https://oox.art/marketplace/collections/XPIXEL-c59b48" }
+        ],
+        isDailyBuilder: true,
+        isVerifiedCreative: true
+    },
+    {
+        id: "16",
+        slug: "triskel",
+        name: "Triskel",
+        description: "Triskel creates designs that inspire and transcend the boundaries of digital art. Creator of a bot capable of sending real-time alerts about NFT sales directly on Telegram. Web3 gaming interface for Odin's Deck owners.",
+        category: "NFTS Project",
+        tags: ["Art", "Utility", "Gaming"],
+        status: "active",
+        links: {
+            twitter: "https://x.com/Triskel_MvX",
+            telegram: "https://t.me/TriskelMultiversX",
+            website: "https://www.odinverse.app/"
+        },
+        image: "/triskel-logo.png",
+        bannerImage: "/triskel-banner.png",
+        ooxCollections: [
+            { label: "Odins Deck", url: "https://oox.art/marketplace/collections/ODINSDECK-4e300a" },
+            { label: "Odins Fury", url: "https://oox.art/marketplace/collections/OFT-01552b" }
+        ],
+        isDailyBuilder: true,
+        isVerifiedCreative: true
+    },
+    {
+        id: "17",
+        slug: "trad3e",
+        name: "Trad3e",
+        description: "As a project we provide services in MVX. Launched 10 NFT collections, owned, private, and colaborate.",
+        category: "NFTS Project",
+        tags: ["Services", "NFT Collections", "MVX"],
+        status: "active",
+        links: {
+            twitter: "https://t.me/Trad3EX",
+            discord: "https://discord.gg/cpa-939118044066746378",
+            telegram: "https://t.me/Trad3EX",
+            website: "https://www.trad3ex.com/"
+        },
+        image: "",
+        bannerImage: "",
+        ooxCollections: [
+            { label: "ArtCPAFounders", url: "https://oox.art/marketplace/collections/CPA-76d979" },
+            { label: "Goddess", url: "https://oox.art/marketplace/collections/CPA-f1fc6c" }
+        ],
+        isDailyBuilder: true,
+        isVerifiedCreative: true
+    },
+    {
+        id: "18",
+        slug: "excons",
+        name: "Excons",
+        description: "It's not just about hodling; it's about dominating the financial game and building a legacy.",
+        category: "NFTS Project",
+        tags: ["Finance", "Strategy", "Empire"],
+        status: "active",
+        links: {
+            twitter: "https://x.com/exconsempire",
+            discord: "https://discord.gg/CyaSKg283s",
+            website: "https://excons.xyz/"
+        },
+        image: "/excons-logo.jpg",
+        bannerImage: "/excons-banner.jpg",
+        ooxCollections: [
+            { label: "BMPSASS", url: "https://oox.art/marketplace/collections/BMPASS-989598" },
+            { label: "xKEY", url: "https://oox.art/marketplace/collections/XKEY-e6e64b" }
         ],
         isDailyBuilder: true,
         isVerifiedCreative: true

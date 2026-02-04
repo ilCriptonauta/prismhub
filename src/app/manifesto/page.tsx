@@ -78,7 +78,7 @@ export default function Manifesto() {
                                 </div>
                                 <h3 className="text-2xl font-bold text-text-primary">Discovery</h3>
                                 <p className="text-text-secondary leading-relaxed">
-                                    OOXHub is the first art repository dedicated to the MultiversX ecosystem. We provide a single, premium destination to discover the most innovative NFTS projects and independent artists.
+                                    OOXHub is the first art repository dedicated to the MultiversX ecosystem. We provide a single, premium destination to discover the most innovative NFTS projects and artists.
                                 </p>
                             </Card>
                         </motion.div>
@@ -143,6 +143,9 @@ export default function Manifesto() {
                                 <p>
                                     We believe that every pixel tells a story and every smart contract is a piece of architecture. Our goal is to ensure these stories are told and this architecture is seen.
                                 </p>
+                                <p>
+                                    To ensure absolute fairness and maximum exposure for every creator, our repository algorithm is purely randomized. With every visit or page refresh, all projects and artists are reshuffled, giving everyone a fresh perspective and an equal opportunity to be showcased in our premium featured placements.
+                                </p>
                                 <p className="text-text-primary font-bold">
                                     Welcome to the Hub. Welcome to the future of digital discovery.
                                 </p>
@@ -196,10 +199,10 @@ export default function Manifesto() {
                                 </p>
                                 <div className="pt-4">
                                     <Button
-                                        variant="default"
-                                        size="lg"
                                         asChild
-                                        className="rounded-2xl px-12 py-7 font-black shadow-xl shadow-primary/30 text-lg group/btn"
+                                        variant="ghost"
+                                        size="lg"
+                                        className="gradient-border rounded-2xl px-12 py-7 font-black shadow-lg shadow-primary/5 group/btn"
                                     >
                                         <a href="https://oox.art" target="_blank" rel="noopener noreferrer">
                                             Open OOX

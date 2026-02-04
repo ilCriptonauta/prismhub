@@ -18,7 +18,7 @@ const XIcon = ({ className }: { className?: string }) => (
 export function FeaturedProject({ project }: { project: Project }) {
     if (!project) return null;
 
-    const isArtist = project.category === "Independent Artists";
+    const isArtist = project.category === "Artists";
     const path = isArtist ? `/artist/${project.slug}` : `/project/${project.slug}`;
 
     return (

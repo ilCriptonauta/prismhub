@@ -18,7 +18,7 @@ const XIcon = ({ className }: { className?: string }) => (
 const MotionCard = motion(Card);
 
 export function ProjectCard({ project }: { project: Project }) {
-    const isArtist = project.category === "Independent Artists";
+    const isArtist = project.category === "Artists";
     const path = isArtist ? `/artist/${project.slug}` : `/project/${project.slug}`;
 
     // Mouse position relative to the card for a subtle tilt

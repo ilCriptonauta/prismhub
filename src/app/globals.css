@@ -33,6 +33,33 @@
   --radius-sm: calc(var(--radius) - 4px);
 }
 
+@utility gradient-border {
+  position: relative;
+  background: transparent;
+  transition: all 0.3s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    /* border thickness */
+    border-radius: inherit;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  &:hover {
+    background: color-mix(in srgb, var(--primary) 10%, transparent);
+    transform: translateY(-1px);
+  }
+}
+
 
 :root {
   --radius: 0.75rem;

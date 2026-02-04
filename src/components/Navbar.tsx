@@ -30,7 +30,8 @@ export function Navbar() {
                     <div className="flex items-center gap-4">
                         <Button
                             asChild
-                            className="bg-gradient-to-r from-primary to-secondary text-white hover:opacity-90 font-semibold transition-all shadow-md hover:shadow-lg"
+                            variant="ghost"
+                            className="gradient-border font-semibold transition-all shadow-sm hover:shadow-md rounded-full px-6"
                         >
                             <a href="https://oox.art" target="_blank" rel="noopener noreferrer">
                                 Open OOX

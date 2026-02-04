@@ -36,7 +36,7 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
 
     if (!project) return null;
 
-    const isArtist = project.category === "Independent Artists";
+    const isArtist = project.category === "Artists";
 
     const handleShare = () => {
         const url = `${window.location.origin}${isArtist ? '/artist/' : '/project/'}${project.slug}`;
