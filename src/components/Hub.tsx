@@ -65,7 +65,7 @@ export function Hub() {
                         transition={{ duration: 0.8, ease: "easeOut" }}
                         className="space-y-6"
                     >
-                        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tight text-text-primary leading-[0.9]">
+                        <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight text-text-primary leading-[0.9]">
                             Collective <br />
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
                                 Creative Evolution

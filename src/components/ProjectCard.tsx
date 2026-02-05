@@ -2,12 +2,21 @@
 
 import { useState } from "react";
 import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
-import { ExternalLink, Zap, ShieldCheck, Hammer } from "lucide-react";
+import { ExternalLink, Zap, ShieldCheck, Hammer, Vote } from "lucide-react";
 import { Card, CardBadge, CardDecoration } from "./modern-ui/card";
 import { Button } from "./modern-ui/button";
 import { Project } from "@/data/projects";
 
 import Link from "next/link";
+import { useGetIsLoggedIn } from "@multiversx/sdk-dapp/out/react/account/useGetIsLoggedIn";
+import { TransactionManager } from "@multiversx/sdk-dapp/out/managers/TransactionManager/TransactionManager";
+import { getAccountProvider } from "@multiversx/sdk-dapp/out/providers/helpers/accountProvider";
+import { getAccount } from "@multiversx/sdk-dapp/out/methods/account/getAccount";
+import { getAddress } from "@multiversx/sdk-dapp/out/methods/account/getAddress";
+import { TokenTransfer, Address, Transaction } from "@multiversx/sdk-core";
+import { refreshAccount } from "@multiversx/sdk-dapp/out/utils/account/refreshAccount";
+import { Buffer } from "buffer";
+
 
 const XIcon = ({ className }: { className?: string }) => (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -32,6 +41,73 @@ export function ProjectCard({ project }: { project: Project }) {
     // Subtle rotation values - Reduced intensity for better compatibility
     const rotateX = useTransform(mouseY, [-0.5, 0.5], [5, -5]);
     const rotateY = useTransform(mouseX, [-0.5, 0.5], [-5, 5]);
+
+    const isLoggedIn = useGetIsLoggedIn();
+    const [isVoting, setIsVoting] = useState(false);
+    const [showThanks, setShowThanks] = useState(false);
+
+    const handleVote = async () => {
+        if (!isLoggedIn) {
+            alert("Please connect your wallet to vote.");
+            return;
+        }
+
+        setIsVoting(true);
+        try {
+            const provider = getAccountProvider();
+            const address = getAddress();
+            const account = getAccount();
+
+            const ONX_TOKEN_ID = "ONX-3e51c8";
+            const VOTE_AMOUNT = "200";
+            const CONTRACT_ADDRESS = "erd1qqqqqqqqqqqqqpgqlcw9xqc29veuf65ynl3uftkc3dysmtca899q6zsrc5";
+
+            // Manual construction for simplicity in v5
+            // ESDTTransfer@<token_id_hex>@<amount_hex>@<function_hex>@<arg1_hex>
+            const tokenHex = Buffer.from(ONX_TOKEN_ID).toString("hex");
+            const amountHex = (BigInt(VOTE_AMOUNT) * (10n ** 18n)).toString(16).padStart(16, '0');
+            const functionHex = Buffer.from("vote").toString("hex");
+            const argHex = Buffer.from(project.id).toString("hex");
+
+            const payloadData = `ESDTTransfer@${tokenHex}@${amountHex}@${functionHex}@${argHex}`;
+
+            const tx = new Transaction({
+                nonce: BigInt(account.nonce),
+                value: 0n,
+                sender: new Address(account.address),
+                receiver: new Address(CONTRACT_ADDRESS),
+                gasLimit: 10000000n,
+                chainID: "1",
+                data: new TextEncoder().encode(payloadData),
+            });
+
+            // Sign
+            const signedTxs = await provider.signTransactions([tx]);
+
+            // Send
+            const sentTxs = await TransactionManager.getInstance().send(signedTxs);
+
+            // Track
+            const sessionId = await TransactionManager.getInstance().track(sentTxs, {
+                transactionsDisplayInfo: {
+                    processingMessage: "Processing vote...",
+                    errorMessage: "An error occurred during vote",
+                    successMessage: "Vote cast successfully!"
+                }
+            });
+
+            if (sessionId) {
+                setShowThanks(true);
+                setTimeout(() => setShowThanks(false), 5000);
+            }
+
+            await refreshAccount();
+        } catch (error) {
+            console.error("Voting failed:", error);
+        } finally {
+            setIsVoting(false);
+        }
+    };
 
     function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
         const rect = event.currentTarget.getBoundingClientRect();
@@ -147,18 +223,47 @@ export function ProjectCard({ project }: { project: Project }) {
                 </div>
 
                 {/* Footer: Learn More Button */}
-                <div className="pt-4 mt-auto">
+                <div className="pt-4 mt-auto flex gap-2">
                     <Button
                         variant="outline"
                         size="sm"
                         asChild
-                        className="w-full text-[10px] font-black h-9 border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all group/oox rounded-xl"
+                        className="flex-grow text-[10px] font-black h-9 border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all group/oox rounded-xl"
                     >
                         <Link href={path}>
                             <span className="mx-auto text-primary uppercase">LEARN MORE</span>
                         </Link>
                     </Button>
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        className={`h-9 w-9 border-primary/20 hover:border-primary/50 hover:bg-primary/5 text-primary rounded-xl shrink-0 transition-all ${showThanks ? "bg-primary/20 scale-110" : ""}`}
+                        title="Vote with $ONX"
+                        onClick={handleVote}
+                        loading={isVoting}
+                    >
+                        {showThanks ? (
+                            <motion.div
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                className="flex items-center justify-center"
+                            >
+                                <Zap className="w-4 h-4 fill-primary" />
+                            </motion.div>
+                        ) : (
+                            <Vote className="w-4 h-4" />
+                        )}
+                    </Button>
                 </div>
+                {showThanks && (
+                    <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-[10px] text-primary font-bold text-center animate-pulse"
+                    >
+                        GRAZIE PER IL TUO VOTO! 🧅
+                    </motion.p>
+                )}
             </div>
         </MotionCard>
     );

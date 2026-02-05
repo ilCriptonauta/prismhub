@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ExternalLink, ShieldCheck, Hammer, Zap, Globe, Share2, Check } from "lucide-react";
+import { X, ExternalLink, ShieldCheck, Hammer, Zap, Globe, Share2, Check, Vote } from "lucide-react";
 import { Project } from "@/data/projects";
 import { Button } from "./modern-ui/button";
 import { CardBadge } from "./modern-ui/card";
@@ -110,6 +110,12 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
                                         ) : (
                                             <Share2 className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
                                         )}
+                                    </button>
+                                    <button
+                                        className="p-2 bg-background shadow-md border border-border rounded-xl text-primary hover:bg-surface transition-all active:scale-95 flex items-center gap-2 group"
+                                        title="Vote with $ONX"
+                                    >
+                                        <Vote className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
                                     </button>
                                     <div title="Verified Creative" className="p-2 bg-background shadow-md border border-border rounded-xl">
                                         <ShieldCheck className="w-6 h-6 text-secondary" />

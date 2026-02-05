@@ -1,0 +1,126 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.93.0",
+            "commitHash": "254b59607d4417e9dffbc307138ae5c86280fe4c",
+            "commitDate": "2026-01-19",
+            "channel": "Stable",
+            "host": "aarch64-apple-darwin",
+            "short": "rustc 1.93.0 (254b59607 2026-01-19)",
+            "llvmVersion": "21.1"
+        },
+        "contractCrate": {
+            "name": "oox-hub-vote",
+            "version": "1.0.0"
+        },
+        "framework": {
+            "name": "multiversx-sc",
+            "version": "0.64.1"
+        }
+    },
+    "name": "OoxHubVote",
+    "constructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "upgradeConstructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "setVoteToken",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "token_id",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "setVotePrice",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "price",
+                    "type": "BigUint"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "vote",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "nft_id",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "resetMonthlyVotes",
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "getAllNftVotes",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "variadic<multi<TokenIdentifier,u64>>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "name": "getVotes",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "key",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        }
+    ],
+    "events": [
+        {
+            "identifier": "vote_event",
+            "inputs": [
+                {
+                    "name": "caller",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "nft_id",
+                    "type": "TokenIdentifier",
+                    "indexed": true
+                },
+                {
+                    "name": "amount",
+                    "type": "u64"
+                }
+            ]
+        }
+    ],
+    "esdtAttributes": [],
+    "hasCallback": false,
+    "types": {}
+}

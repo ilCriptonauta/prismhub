@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { MXProvider } from "@/components/MXProvider";
 
 export const metadata: Metadata = {
   title: "OOXHub | MultiversX Ecosystem",
@@ -23,8 +24,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
-          {modal}
+          <MXProvider>
+            {children}
+            {modal}
+          </MXProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,7 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  transpilePackages: ["@multiversx/sdk-dapp", "@multiversx/sdk-dapp-ui", "@multiversx/sdk-dapp-utils"],
+  webpack: (config) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      path: false,
+      os: false,
+      buffer: require.resolve('buffer/'),
+    };
+    return config;
+  },
 };
 
 export default nextConfig;
