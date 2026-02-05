@@ -1,5 +1,5 @@
 "use client";
-
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { initApp } from "@multiversx/sdk-dapp/out/methods/initApp/initApp";
 import { EnvironmentsEnum } from "@multiversx/sdk-dapp/out/types/enums.types";
@@ -42,11 +42,11 @@ export function MXProvider({ children }: { children: React.ReactNode }) {
     if (!initialized) return <>{children}</>;
 
     return (
-        <>
+        <React.Fragment>
             {/* The managers in sdk-dapp will use these if they are in the DOM */}
-            <mvx-toast-list />
-            <mvx-sign-transactions-panel />
+            {React.createElement('mvx-toast-list')}
+            {React.createElement('mvx-sign-transactions-panel')}
             {children}
-        </>
+        </React.Fragment>
     );
 }
