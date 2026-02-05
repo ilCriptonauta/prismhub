@@ -46,6 +46,7 @@ export function MXProvider({ children }: { children: React.ReactNode }) {
             {/* The managers in sdk-dapp will use these if they are in the DOM */}
             {React.createElement('mvx-toast-list')}
             {React.createElement('mvx-sign-transactions-panel')}
+            {React.createElement('mvx-unlock-panel')}
             {children}
         </React.Fragment>
     );

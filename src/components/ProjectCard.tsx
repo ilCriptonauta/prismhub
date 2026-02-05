@@ -48,7 +48,16 @@ export function ProjectCard({ project }: { project: Project }) {
 
     const handleVote = async () => {
         if (!isLoggedIn) {
-            alert("Please connect your wallet to vote.");
+            const { UnlockPanelManager } = await import("@multiversx/sdk-dapp/out/managers/UnlockPanelManager/UnlockPanelManager");
+            const unlockPanelManager = UnlockPanelManager.init({
+                loginHandler: async () => {
+                    console.log("Logged in!");
+                },
+                onClose: async () => {
+                    console.log("Panel closed");
+                }
+            });
+            unlockPanelManager.openUnlockPanel();
             return;
         }
 
