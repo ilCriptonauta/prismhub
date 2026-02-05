@@ -8,6 +8,7 @@ import { Button } from "./modern-ui/button";
 import { CardBadge } from "./modern-ui/card";
 import { ProjectDetailModal } from "./ProjectDetailModal";
 import Link from "next/link";
+import { useVote } from "@/hooks/useVote";
 
 const XIcon = ({ className }: { className?: string }) => (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -16,6 +17,7 @@ const XIcon = ({ className }: { className?: string }) => (
 );
 
 export function FeaturedProject({ project }: { project: Project }) {
+    const { handleVote, isVoting } = useVote();
     if (!project) return null;
 
     const isArtist = project.category === "Artists";
@@ -97,6 +99,16 @@ export function FeaturedProject({ project }: { project: Project }) {
                                 <Link href={path}>
                                     LEARN MORE <ExternalLink className="ml-2 w-4 h-4" />
                                 </Link>
+                            </Button>
+
+                            <Button
+                                variant="outline"
+                                size="lg"
+                                onClick={() => handleVote(project.id)}
+                                loading={isVoting}
+                                className="rounded-xl px-10 border-primary/20 hover:border-primary/50 text-primary shadow-lg"
+                            >
+                                VOTE WITH 200 $ONX
                             </Button>
 
                             {project.links.twitter && (

@@ -6,6 +6,7 @@ import { Project } from "@/data/projects";
 import { Button } from "./modern-ui/button";
 import { CardBadge } from "./modern-ui/card";
 import { useState } from "react";
+import { useVote } from "@/hooks/useVote";
 
 interface ProjectDetailModalProps {
     project: Project | null;
@@ -33,6 +34,7 @@ const TelegramIcon = ({ className }: { className?: string }) => (
 
 export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailModalProps) {
     const [copied, setCopied] = useState(false);
+    const { handleVote, isVoting } = useVote();
 
     if (!project) return null;
 
@@ -112,10 +114,12 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
                                         )}
                                     </button>
                                     <button
-                                        className="p-2 bg-background shadow-md border border-border rounded-xl text-primary hover:bg-surface transition-all active:scale-95 flex items-center gap-2 group"
-                                        title="Vote with $ONX"
+                                        className={`p-2 bg-background shadow-md border border-border rounded-xl text-primary hover:bg-surface transition-all active:scale-95 flex items-center gap-2 group ${isVoting ? "opacity-50 cursor-wait" : ""}`}
+                                        title="Vote with 200 $ONX"
+                                        onClick={() => handleVote(project.id)}
+                                        disabled={isVoting}
                                     >
-                                        <Vote className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
+                                        <Vote className={`w-6 h-6 text-primary group-hover:scale-110 transition-transform ${isVoting ? "animate-pulse" : ""}`} />
                                     </button>
                                     <div title="Verified Creative" className="p-2 bg-background shadow-md border border-border rounded-xl">
                                         <ShieldCheck className="w-6 h-6 text-secondary" />
