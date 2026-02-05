@@ -5,11 +5,14 @@ import { initApp } from "@multiversx/sdk-dapp/out/methods/initApp/initApp";
 import { EnvironmentsEnum } from "@multiversx/sdk-dapp/out/types/enums.types";
 
 
+
 export function MXProvider({ children }: { children: React.ReactNode }) {
     const [initialized, setInitialized] = useState(false);
 
     useEffect(() => {
         const initialize = async () => {
+            if (initialized) return;
+
             await initApp({
                 dAppConfig: {
                     environment: EnvironmentsEnum.mainnet,
@@ -17,7 +20,8 @@ export function MXProvider({ children }: { children: React.ReactNode }) {
                         walletConnect: {
                             walletConnectV2ProjectId: '9b642279af76274472f883656d7348e6'
                         }
-                    }
+                    },
+                    nativeAuth: true
                 }
             });
 
@@ -37,16 +41,16 @@ export function MXProvider({ children }: { children: React.ReactNode }) {
         if (typeof window !== "undefined") {
             initialize();
         }
-    }, []);
+    }, [initialized]);
 
-    if (!initialized) return <>{children}</>;
+    if (!initialized) {
+        return <div className="min-h-screen bg-background flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>;
+    }
 
     return (
         <React.Fragment>
-            {/* The managers in sdk-dapp will use these if they are in the DOM */}
-            {React.createElement('mvx-toast-list')}
-            {React.createElement('mvx-sign-transactions-panel')}
-            {React.createElement('mvx-unlock-panel')}
             {children}
         </React.Fragment>
     );
