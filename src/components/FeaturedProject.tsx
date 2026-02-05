@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Zap, Calendar } from "lucide-react";
+import { ExternalLink, Zap, Calendar, Check } from "lucide-react";
 import { Project } from "@/data/projects";
 import { Button } from "./modern-ui/button";
 import { CardBadge } from "./modern-ui/card";
@@ -18,7 +18,17 @@ const XIcon = ({ className }: { className?: string }) => (
 
 export function FeaturedProject({ project }: { project: Project }) {
     const { handleVote, isVoting } = useVote();
+    const [showThanks, setShowThanks] = useState(false);
+
     if (!project) return null;
+
+    const onVote = async () => {
+        const success = await handleVote(project.id);
+        if (success) {
+            setShowThanks(true);
+            setTimeout(() => setShowThanks(false), 5000);
+        }
+    };
 
     const isArtist = project.category === "Artists";
     const path = isArtist ? `/artist/${project.slug}` : `/project/${project.slug}`;
@@ -104,11 +114,18 @@ export function FeaturedProject({ project }: { project: Project }) {
                             <Button
                                 variant="outline"
                                 size="lg"
-                                onClick={() => handleVote(project.id)}
+                                onClick={onVote}
                                 loading={isVoting}
-                                className="rounded-xl px-10 border-primary/20 hover:border-primary/50 text-primary shadow-lg"
+                                className={`rounded-xl px-10 border-primary/20 shadow-lg transition-all ${showThanks ? "bg-primary/10 border-primary text-primary" : "hover:border-primary/50 text-primary"}`}
+                                disabled={showThanks}
                             >
-                                VOTE WITH 200 $ONX
+                                {showThanks ? (
+                                    <>
+                                        <Check className="mr-2 w-4 h-4" /> Thanks for voting
+                                    </>
+                                ) : (
+                                    "VOTE WITH 200 $ONX"
+                                )}
                             </Button>
 
                             {project.links.twitter && (

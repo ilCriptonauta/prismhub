@@ -32,9 +32,11 @@ export function ProjectCard({ project }: { project: Project }) {
     const [showThanks, setShowThanks] = useState(false);
 
     const handleVote = async () => {
-        await voteAction(project.id);
-        setShowThanks(true);
-        setTimeout(() => setShowThanks(false), 5000);
+        const success = await voteAction(project.id);
+        if (success) {
+            setShowThanks(true);
+            setTimeout(() => setShowThanks(false), 5000);
+        }
     };
 
     function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
@@ -193,7 +195,7 @@ export function ProjectCard({ project }: { project: Project }) {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-[10px] text-primary font-bold text-center animate-pulse"
                     >
-                        GRAZIE PER IL TUO VOTO! 🧅
+                        Thanks for voting
                     </motion.p>
                 )}
             </div>

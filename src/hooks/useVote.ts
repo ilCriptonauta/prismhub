@@ -77,11 +77,14 @@ export function useVote() {
 
             if (sessionId) {
                 console.log("Vote transaction sent, session:", sessionId);
+                await refreshAccount();
+                return true;
             }
 
-            await refreshAccount();
+            return false;
         } catch (error) {
             console.error("Voting failed:", error);
+            return false;
         } finally {
             setIsVoting(false);
         }

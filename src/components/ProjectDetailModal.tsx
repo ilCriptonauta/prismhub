@@ -35,6 +35,16 @@ const TelegramIcon = ({ className }: { className?: string }) => (
 export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailModalProps) {
     const [copied, setCopied] = useState(false);
     const { handleVote, isVoting } = useVote();
+    const [showThanks, setShowThanks] = useState(false);
+
+    const onVote = async () => {
+        if (!project) return;
+        const success = await handleVote(project.id);
+        if (success) {
+            setShowThanks(true);
+            setTimeout(() => setShowThanks(false), 5000);
+        }
+    };
 
     if (!project) return null;
 
@@ -114,12 +124,21 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
                                         )}
                                     </button>
                                     <button
-                                        className={`p-2 bg-background shadow-md border border-border rounded-xl text-primary hover:bg-surface transition-all active:scale-95 flex items-center gap-2 group ${isVoting ? "opacity-50 cursor-wait" : ""}`}
-                                        title="Vote with 200 $ONX"
-                                        onClick={() => handleVote(project.id)}
+                                        className={`p-2 bg-background shadow-md border border-border rounded-xl text-primary hover:bg-surface transition-all active:scale-95 flex items-center gap-2 group relative ${isVoting ? "opacity-50 cursor-wait" : ""}`}
+                                        title={showThanks ? "Thanks for voting" : "Vote with 200 $ONX"}
+                                        onClick={onVote}
                                         disabled={isVoting}
                                     >
-                                        <Vote className={`w-6 h-6 text-primary group-hover:scale-110 transition-transform ${isVoting ? "animate-pulse" : ""}`} />
+                                        {showThanks ? (
+                                            <Check className="w-6 h-6 text-primary animate-in zoom-in spin-in duration-300" />
+                                        ) : (
+                                            <Vote className={`w-6 h-6 text-primary group-hover:scale-110 transition-transform ${isVoting ? "animate-pulse" : ""}`} />
+                                        )}
+                                        {showThanks && (
+                                            <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded-md whitespace-nowrap animate-in fade-in slide-in-from-bottom-2">
+                                                Thanks for voting
+                                            </span>
+                                        )}
                                     </button>
                                     <div title="Verified Creative" className="p-2 bg-background shadow-md border border-border rounded-xl">
                                         <ShieldCheck className="w-6 h-6 text-secondary" />
