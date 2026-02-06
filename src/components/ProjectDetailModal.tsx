@@ -100,8 +100,8 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
                         {/* Profile Info */}
                         <div className="relative px-8 pb-12">
                             {/* Overlapping Avatar */}
-                            <div className="relative flex justify-between items-end -mt-16 mb-8 px-2">
-                                <div className="w-32 h-32 bg-background border-4 border-background rounded-3xl overflow-hidden shadow-2xl">
+                            <div className="relative flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-end -mt-16 mb-8 px-2">
+                                <div className="w-32 h-32 flex-shrink-0 bg-background border-4 border-background rounded-3xl overflow-hidden shadow-2xl">
                                     {project.image ? (
                                         <img src={project.image} alt={project.name} className="w-full h-full object-cover" />
                                     ) : (
@@ -111,7 +111,7 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
                                     )}
                                 </div>
 
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 flex-wrap">
                                     <button
                                         onClick={handleShare}
                                         className="p-2 bg-background shadow-md border border-border rounded-xl text-primary hover:bg-surface transition-all active:scale-95 flex items-center gap-2 group"
