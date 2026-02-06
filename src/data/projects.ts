@@ -94,8 +94,8 @@ export const PROJECTS_DATA: Project[] = [
             twitter: "https://x.com/KingOwl7_",
             telegram: "https://t.me/KO7ORIGINALS"
         },
-        image: "/owlking-logo.jpg",
-        bannerImage: "/owlking-banner.jpg",
+        image: "/owlking-logo-v2.jpg",
+        bannerImage: "/owlking-banner-v2.jpg",
         ooxCollections: [
             { label: "KO7Gridfall", url: "https://oox.art/marketplace/collections/KO7GF-044047" }
         ],
@@ -395,8 +395,8 @@ export const PROJECTS_DATA: Project[] = [
             telegram: "https://t.me/Trad3EX",
             website: "https://www.trad3ex.com/"
         },
-        image: "/trad3e-logo.jpg",
-        bannerImage: "/trad3e-banner.jpg",
+        image: "/trad3e-logo-v2.jpg",
+        bannerImage: "/trad3e-banner-v2.jpg",
         ooxCollections: [
             { label: "ArtCPAFounders", url: "https://oox.art/marketplace/collections/CPA-76d979" },
             { label: "Goddess", url: "https://oox.art/marketplace/collections/CPA-f1fc6c" }
@@ -458,8 +458,8 @@ export const PROJECTS_DATA: Project[] = [
             discord: "https://discord.gg/Ge77s4Km2Z",
             telegram: "https://t.me/BloopXNft"
         },
-        image: "/bloopx-logo.jpg",
-        bannerImage: "/bloopx-banner.jpg",
+        image: "/bloopx-logo-v2.jpg",
+        bannerImage: "/bloopx-banner-v2.jpg",
         ooxCollections: [
             { label: "BLOOPX", url: "https://oox.art/marketplace/collections/BLOOPX-1ced34" }
         ],
@@ -480,8 +480,8 @@ export const PROJECTS_DATA: Project[] = [
             telegram: "https://t.me/evnftreal",
             website: "https://dapp.eventivivi.it"
         },
-        image: "/ev-ecosystem-logo.jpg",
-        bannerImage: "/ev-ecosystem-banner.jpg",
+        image: "/ev-ecosystem-logo-v2.jpg",
+        bannerImage: "/ev-ecosystem-banner-v2.jpg",
         ooxCollections: [
             { label: "E.V Cyborgs", url: "https://oox.art/marketplace/collections/EVCYB-aea8b4" },
             { label: "EvolvedOAG", url: "https://oox.art/marketplace/collections/EVOAG-1a4f7d" }
