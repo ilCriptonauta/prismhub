@@ -9,7 +9,7 @@ import Link from "next/link";
 export function Footer() {
     return (
         <footer className="border-t border-border bg-surface/30 backdrop-blur-md py-12 px-4">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
                 {/* Brand */}
                 <div className="space-y-4">
                     <div className="flex items-center gap-2">
@@ -31,6 +31,18 @@ export function Footer() {
                             <Link href="/ranking" className="hover:text-primary transition-colors">
                                 Leaderboard
                             </Link>
+                        </li>
+                    </ul>
+                </div>
+
+                {/* Marketplace */}
+                <div className="space-y-3">
+                    <h4 className="font-bold text-text-primary text-sm uppercase tracking-wider">Marketplace</h4>
+                    <ul className="space-y-2 text-sm text-text-secondary">
+                        <li>
+                            <a href="https://oox.art" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                                Open OOX
+                            </a>
                         </li>
                     </ul>
                 </div>

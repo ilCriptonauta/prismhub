@@ -4,6 +4,7 @@ import { motion, Variants } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Sparkles, ShieldCheck, Hammer, Heart, Globe, Eye, ExternalLink } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import { Button } from "@/components/modern-ui/button";
 import { Card, CardDecoration } from "@/components/modern-ui/card";
 
@@ -215,6 +216,7 @@ export default function Manifesto() {
                     </motion.div>
                 </div>
             </div>
+            <Footer />
         </main>
     );
 }
