@@ -199,43 +199,37 @@ function RankingCard({ item, delay, variant = "primary" }: { item: RankedProject
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay, duration: 0.5 }}
         >
-            <Card className="p-6 border-border/50 hover:border-primary/30 transition-all group relative">
-                <CardDecoration className={variant === "primary" ? "bg-primary/5" : "bg-secondary/5"} />
+            <Link href={path} className="block group">
+                <Card className="p-6 border-border/50 group-hover:border-primary/30 group-hover:bg-primary/5 transition-all relative overflow-hidden">
+                    <CardDecoration className={variant === "primary" ? "bg-primary/5" : "bg-secondary/5"} />
 
-                <div className="flex items-center gap-6">
-                    {/* Rank Badge */}
-                    <div className={`
-                        flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl
-                        ${item.rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-amber-600 text-white shadow-lg shadow-amber-500/20' :
-                            item.rank === 2 ? 'bg-gradient-to-br from-slate-300 to-slate-500 text-white shadow-lg shadow-slate-500/20' :
-                                'bg-gradient-to-br from-amber-700 to-amber-900 text-white shadow-lg shadow-amber-900/20'}
-                    `}>
-                        #{item.rank}
-                    </div>
-
-                    {/* Image & Info */}
-                    <div className="flex-grow flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-xl overflow-hidden border border-border bg-surface flex-shrink-0">
-                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                    <div className="flex items-center gap-6 relative z-10">
+                        {/* Rank Badge */}
+                        <div className={`
+                            flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl
+                            ${item.rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-amber-600 text-white shadow-lg shadow-amber-500/20' :
+                                item.rank === 2 ? 'bg-gradient-to-br from-slate-300 to-slate-500 text-white shadow-lg shadow-slate-500/20' :
+                                    'bg-gradient-to-br from-amber-700 to-amber-900 text-white shadow-lg shadow-amber-900/20'}
+                        `}>
+                            #{item.rank}
                         </div>
-                        <div className="min-w-0">
-                            <h3 className="font-bold text-lg text-text-primary truncate">{item.name}</h3>
-                            <div className="flex items-center gap-2 text-primary font-bold text-sm">
-                                <Star className="w-4 h-4 fill-current" />
-                                <span>{item.votes} Votes</span>
+
+                        {/* Image & Info */}
+                        <div className="flex-grow flex items-center gap-4">
+                            <div className="w-16 h-16 rounded-xl overflow-hidden border border-border bg-surface flex-shrink-0">
+                                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                            </div>
+                            <div className="min-w-0">
+                                <h3 className="font-bold text-lg text-text-primary truncate group-hover:text-primary transition-colors">{item.name}</h3>
+                                <div className="flex items-center gap-2 text-primary font-bold text-sm">
+                                    <Star className="w-4 h-4 fill-current" />
+                                    <span>{item.votes} Votes</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    {/* Link */}
-                    <Link
-                        href={path}
-                        className="p-3 rounded-xl bg-surface/50 border border-border hover:bg-primary/10 hover:border-primary/30 transition-all group/link"
-                    >
-                        <ExternalLink className="w-5 h-5 text-text-secondary group-hover/link:text-primary transition-colors" />
-                    </Link>
-                </div>
-            </Card>
+                </Card>
+            </Link>
         </motion.div>
     );
 }
