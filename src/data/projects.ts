@@ -144,7 +144,7 @@ export const PROJECTS_DATA: Project[] = [
         id: "6",
         slug: "super-rare-bears",
         name: "Super RARE Bears",
-        description: "Always Bullish! $EGLD/$SOL/$SUI\n\n🐻 10K Genesis NFTs on MultiversX\n💼 Active In-wallet Staking\n\n💰 Stake $RARE, $FEDUP, $HYPE, $BATES, $DBATES & earn!\n\n🗳️ DAO Governance & Gaming\n🎁 Airdrops & Rewards\n⚙️ Powering DeFi, Automation, Utility & Community… Since 2022.",
+        description: "Always Bullish! $EGLD/$SOL/$SUI\n\n🐻 10K Genesis NFTs on MultiversX\n💼 Active In-wallet Staking\n\n💰 Stake $RARE, $FEDUP, $HYPE, $BATES, $DBATES & earn!\n\n🗳️ DAO Governance & Gaming\n🎁 Airdrops & Rewards\n⚙️ Powering DeFi, Automation, Utility & Community… Since 2021.",
         category: "NFTS Project",
         tags: ["PFP", "Utility", "Elite"],
         status: "active",
