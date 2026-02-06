@@ -62,6 +62,9 @@ export function Navbar() {
                             <Link href="/manifesto" className="text-sm font-medium text-text-secondary hover:text-primary transition-colors">
                                 Manifesto
                             </Link>
+                            <Link href="/ranking" className="text-sm font-medium text-text-secondary hover:text-primary transition-colors">
+                                Leaderboard
+                            </Link>
                         </div>
                     </div>
 
