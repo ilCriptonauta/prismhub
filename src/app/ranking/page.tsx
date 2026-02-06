@@ -41,7 +41,7 @@ export default function RankingPage() {
     const topProjects = useMemo(() => {
         return PROJECTS_DATA
             .filter(p => p.category === "NFTS Project")
-            .map(p => ({ ...p, votes: votesData[p.slug] || 0 }))
+            .map(p => ({ ...p, votes: votesData[p.id] || 0 }))
             .sort((a, b) => b.votes - a.votes)
             .slice(0, 3)
             .map((p, i) => ({ ...p, rank: i + 1 }));
@@ -50,7 +50,7 @@ export default function RankingPage() {
     const topArtists = useMemo(() => {
         return PROJECTS_DATA
             .filter(p => p.category === "Artists")
-            .map(p => ({ ...p, votes: votesData[p.slug] || 0 }))
+            .map(p => ({ ...p, votes: votesData[p.id] || 0 }))
             .sort((a, b) => b.votes - a.votes)
             .slice(0, 3)
             .map((p, i) => ({ ...p, rank: i + 1 }));
