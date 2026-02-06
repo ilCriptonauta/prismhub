@@ -524,8 +524,8 @@ export const PROJECTS_DATA: Project[] = [
         links: {
             twitter: "https://x.com/floroiuionel"
         },
-        image: "/floroiu-ionel-logo.jpg",
-        bannerImage: "/floroiu-ionel-banner.jpg",
+        image: "/floroiu-logo.png",
+        bannerImage: "/floroiu-banner.png",
         ooxCollections: [
             { label: "Footballers", url: "https://oox.art/marketplace/collections/FOOTBALL-3d354b" },
             { label: "Others", url: "https://oox.art/marketplace/collections/OTHERS-8e1fc7" }
