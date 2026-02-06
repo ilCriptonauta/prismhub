@@ -390,8 +390,8 @@ export const PROJECTS_DATA: Project[] = [
             telegram: "https://t.me/Trad3EX",
             website: "https://www.trad3ex.com/"
         },
-        image: "",
-        bannerImage: "",
+        image: "/trad3e-logo.jpg",
+        bannerImage: "/trad3e-banner.jpg",
         ooxCollections: [
             { label: "ArtCPAFounders", url: "https://oox.art/marketplace/collections/CPA-76d979" },
             { label: "Goddess", url: "https://oox.art/marketplace/collections/CPA-f1fc6c" }
