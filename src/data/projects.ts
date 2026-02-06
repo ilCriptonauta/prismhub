@@ -488,5 +488,26 @@ export const PROJECTS_DATA: Project[] = [
         ],
         isDailyBuilder: true,
         isVerifiedCreative: true
+    },
+    {
+        id: "22",
+        slug: "owlcityx",
+        name: "OwlCityX",
+        description: "Bridging Worlds, Uniting Realities - Web2 Meets Web3 in a Singular Owl Universe.",
+        category: "NFTS Project",
+        tags: ["Community", "MultiversX", "Metaverse"],
+        status: "active",
+        links: {
+            twitter: "https://x.com/OwlCitizensX",
+            telegram: "https://t.me/OwlCityX"
+        },
+        image: "/owlcityx-logo.jpg",
+        bannerImage: "/owlcityx-banner.jpg",
+        ooxCollections: [
+            { label: "OwlCityX", url: "https://oox.art/marketplace/collections/CREATOROCX-b96f26" },
+            { label: "OwlCityX Stage II", url: "https://oox.art/marketplace/collections/OCXSII-26bb89" }
+        ],
+        isDailyBuilder: true,
+        isVerifiedCreative: true
     }
 ];
