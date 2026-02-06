@@ -195,7 +195,7 @@ export const PROJECTS_DATA: Project[] = [
         id: "9",
         slug: "hodl-token-club",
         name: "Hodl Token Club",
-        description: "Holders of Empyreans gain access into a visionary community, access our daily $1,000 REWARD draw, surprise bonuses and club perks. Every Empyrean minted with the rare $HODL trait receives an airdrop of 1 $HODL. Keep your Empyrean in-wallet to earn weekly $REWARD, with higher yields for rarer traits.",
+        description: "Holders of Empyreans gain access into a visionary community, access our daily $1,000 REWARD draw, surprise bonuses and club perks. Keep your Empyrean in-wallet to earn weekly $REWARD, with higher yields for rarer traits.",
         category: "NFTS Project",
         tags: ["Exclusive", "Utility", "Community"],
         status: "active",
@@ -511,6 +511,25 @@ export const PROJECTS_DATA: Project[] = [
             { label: "Boogas", url: "https://oox.art/marketplace/collections/BOOGAS-afc98d" }
         ],
         isDailyBuilder: true,
+        isVerifiedCreative: true
+    },
+    {
+        id: "24",
+        slug: "floroiu-ionel",
+        name: "Floroiu Ionel",
+        description: "I try to bring to life what my imagination wants at a specific moment, using AI as a tool sometimes! I put my creations on Multivers and as long as the network survives, my art will survive too!",
+        category: "Artists",
+        tags: ["AI Art", "Digital Art", "MultiversX"],
+        status: "active",
+        links: {
+            twitter: "https://x.com/floroiuionel"
+        },
+        image: "/floroiu-ionel-logo.jpg",
+        bannerImage: "/floroiu-ionel-banner.jpg",
+        ooxCollections: [
+            { label: "Footballers", url: "https://oox.art/marketplace/collections/FOOTBALL-3d354b" },
+            { label: "Others", url: "https://oox.art/marketplace/collections/OTHERS-8e1fc7" }
+        ],
         isVerifiedCreative: true
     }
 ];
