@@ -65,24 +65,6 @@ export const PROJECTS_DATA: Project[] = [
         isVerifiedCreative: true
     },
     {
-        id: "boogas",
-        slug: "boogas",
-        name: "Boogas",
-        description: "Put a bounce in your step!",
-        category: "NFTS Project",
-        tags: ["PFP", "Community", "Art"],
-        status: "active",
-        links: {
-            twitter: "https://x.com/Boogas",
-            telegram: "https://t.me/BoogasPortal",
-            website: "https://boogas.io/"
-        },
-        image: "/boogas-logo.jpg",
-        bannerImage: "/boogas-banner.jpg",
-        isDailyBuilder: true,
-        isVerifiedCreative: true
-    },
-    {
         id: "2",
         slug: "owlking7",
         name: "KingOwl7 | KO7",
@@ -507,6 +489,24 @@ export const PROJECTS_DATA: Project[] = [
             { label: "OwlCityX", url: "https://oox.art/marketplace/collections/CREATOROCX-b96f26" },
             { label: "OwlCityX Stage II", url: "https://oox.art/marketplace/collections/OCXSII-26bb89" }
         ],
+        isDailyBuilder: true,
+        isVerifiedCreative: true
+    },
+    {
+        id: "23",
+        slug: "boogas",
+        name: "Boogas",
+        description: "Put a bounce in your step!",
+        category: "NFTS Project",
+        tags: ["PFP", "Community", "Art"],
+        status: "active",
+        links: {
+            twitter: "https://x.com/Boogas",
+            telegram: "https://t.me/BoogasPortal",
+            website: "https://boogas.io/"
+        },
+        image: "/boogas-logo.jpg",
+        bannerImage: "/boogas-banner.jpg",
         isDailyBuilder: true,
         isVerifiedCreative: true
     }
