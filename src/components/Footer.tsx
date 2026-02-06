@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Github, Twitter, Mail } from "lucide-react";
 import { Logo } from "./Logo";
 import { Button } from "./modern-ui/button";
+import Link from "next/link";
 
 export function Footer() {
     return (
@@ -22,24 +23,16 @@ export function Footer() {
                     </p>
                 </div>
 
-                {/* Links */}
-                <div className="grid grid-cols-2 gap-8">
-                    <div className="space-y-3">
-                        <h4 className="font-bold text-text-primary text-sm uppercase tracking-wider">Explore</h4>
-                        <ul className="space-y-2 text-sm text-text-secondary">
-                            <li className="hover:text-primary transition-colors cursor-pointer">All Projects</li>
-                            <li className="hover:text-primary transition-colors cursor-pointer">DeFi</li>
-                            <li className="hover:text-primary transition-colors cursor-pointer">NFTs</li>
-                        </ul>
-                    </div>
-                    <div className="space-y-3">
-                        <h4 className="font-bold text-text-primary text-sm uppercase tracking-wider">Support</h4>
-                        <ul className="space-y-2 text-sm text-text-secondary">
-                            <li className="hover:text-primary transition-colors cursor-pointer">Submit Project</li>
-                            <li className="hover:text-primary transition-colors cursor-pointer">API Docs</li>
-                            <li className="hover:text-primary transition-colors cursor-pointer">Guidelines</li>
-                        </ul>
-                    </div>
+                {/* Community Power */}
+                <div className="space-y-3">
+                    <h4 className="font-bold text-text-primary text-sm uppercase tracking-wider">Community Power</h4>
+                    <ul className="space-y-2 text-sm text-text-secondary">
+                        <li>
+                            <Link href="/ranking" className="hover:text-primary transition-colors">
+                                Leaderboard
+                            </Link>
+                        </li>
+                    </ul>
                 </div>
 
                 {/* Social */}
