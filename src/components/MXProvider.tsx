@@ -18,7 +18,7 @@ export function MXProvider({ children }: { children: React.ReactNode }) {
                     environment: EnvironmentsEnum.mainnet,
                     providers: {
                         walletConnect: {
-                            walletConnectV2ProjectId: 'f233147e61bcb9a19191092579fc0b54 '
+                            walletConnectV2ProjectId: 'f233147e61bcb9a19191092579fc0b54'
                         }
                     },
                     nativeAuth: true
