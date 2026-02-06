@@ -465,5 +465,28 @@ export const PROJECTS_DATA: Project[] = [
         ],
         isDailyBuilder: true,
         isVerifiedCreative: true
+    },
+    {
+        id: "21",
+        slug: "ev-ecosystem",
+        name: "E.V Ecosystem",
+        description: "E.V. Ecosystem. The home of E.V. Cyborgs, Odd Apes Gang, UNITYX and Tickets Arena.",
+        category: "NFTS Project",
+        tags: ["Ecosystem", "Community", "MultiversX"],
+        status: "active",
+        links: {
+            twitter: "https://x.com/evcyborgs",
+            discord: "https://discord.gg/aAbPUdBuyG",
+            telegram: "https://t.me/evnftreal",
+            website: "https://dapp.eventivivi.it"
+        },
+        image: "/ev-ecosystem-logo.jpg",
+        bannerImage: "/ev-ecosystem-banner.jpg",
+        ooxCollections: [
+            { label: "E.V Cyborgs", url: "https://oox.art/marketplace/collections/EVCYB-aea8b4" },
+            { label: "EvolvedOAG", url: "https://oox.art/marketplace/collections/EVOAG-1a4f7d" }
+        ],
+        isDailyBuilder: true,
+        isVerifiedCreative: true
     }
 ];
