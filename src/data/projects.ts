@@ -420,5 +420,24 @@ export const PROJECTS_DATA: Project[] = [
         ],
         isDailyBuilder: true,
         isVerifiedCreative: true
+    },
+    {
+        id: "19",
+        slug: "stan-wilscott",
+        name: "Stan Wilscott",
+        description: "A lifelong illustrator, inspired since childhood by Enki Bilal, Richard Corben, Moebius, and H.R. Giger, but also by Franquin, Piem, Lambil, and more recently, Manu Larcenet. Drawing is about sharing a fragment of oneself. So I share my joys, my anxieties, and my freedom.",
+        category: "Artists",
+        tags: ["Illustrator", "Art", "Digital Art"],
+        status: "active",
+        links: {
+            twitter: "https://x.com/StanWilscott"
+        },
+        image: "/stan-wilscott-logo.jpg",
+        bannerImage: "/stan-wilscott-banner.jpg",
+        ooxCollections: [
+            { label: "Empyreans", url: "https://oox.art/marketplace/collections/EMP-897b49" },
+            { label: "Olive Grove", url: "https://oox.art/marketplace/collections/OLVGROVE-90fae5" }
+        ],
+        isVerifiedCreative: true
     }
 ];
