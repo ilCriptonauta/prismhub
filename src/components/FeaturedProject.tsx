@@ -74,20 +74,24 @@ export function FeaturedProject({ project }: { project: Project }) {
                     {/* Project Info */}
                     <div className="flex-grow space-y-6 text-center md:text-left">
                         <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                            <CardBadge variant="secondary" className="px-4 py-1.5 text-xs font-bold uppercase tracking-widest">
-                                Featured Highlight
-                            </CardBadge>
-                            <div className="flex items-center gap-1.5 text-text-secondary text-sm font-medium">
-                                <Calendar className="w-4 h-4" />
-                                <span>{project.featuredMonth || "Discovery of the Day"}</span>
+                            <div className="gradient-border rounded-full px-4 py-1.5 backdrop-blur-md hover:transform-none">
+                                <span className="text-xs font-black uppercase tracking-[0.2em] bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
+                                    Featured Highlight
+                                </span>
                             </div>
+                            {project.featuredMonth && project.featuredMonth !== "Discovery of the Day" && (
+                                <div className="flex items-center gap-1.5 text-text-secondary text-sm font-medium">
+                                    <Calendar className="w-4 h-4" />
+                                    <span>{project.featuredMonth}</span>
+                                </div>
+                            )}
                         </div>
 
                         <div className="space-y-3">
                             <h2 className="text-4xl md:text-6xl font-black text-text-primary tracking-tight">
                                 {project.name}
                             </h2>
-                            <p className="text-lg md:text-xl text-text-secondary max-w-2xl leading-relaxed">
+                            <p className="text-lg md:text-xl text-text-primary/90 max-w-2xl leading-relaxed font-medium">
                                 {project.description}
                             </p>
                         </div>
@@ -127,14 +131,6 @@ export function FeaturedProject({ project }: { project: Project }) {
                                     "VOTE WITH 200 $ONX"
                                 )}
                             </Button>
-
-                            {project.links.twitter && (
-                                <Button variant="outline" size="lg" className="rounded-xl px-4" asChild>
-                                    <a href={project.links.twitter} target="_blank" rel="noopener noreferrer">
-                                        <XIcon className="w-6 h-6" />
-                                    </a>
-                                </Button>
-                            )}
                         </div>
                     </div>
                 </div>
