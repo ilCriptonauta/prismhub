@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { motion, Variants } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Sparkles, ShieldCheck, Hammer, Heart, Globe, Eye, ExternalLink } from "lucide-react";
@@ -9,6 +11,17 @@ import { Button } from "@/components/modern-ui/button";
 import { Card, CardDecoration } from "@/components/modern-ui/card";
 
 export default function Manifesto() {
+    const { theme, resolvedTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const marketplaceImage = mounted && (theme === "light" || resolvedTheme === "light")
+        ? "/oox-marketplace-light.png"
+        : "/oox-marketplace-dark.png";
+
     const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
@@ -179,7 +192,7 @@ export default function Manifesto() {
                             <div className="relative group">
                                 <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                                 <img
-                                    src="/oox-promo.png"
+                                    src={marketplaceImage}
                                     alt="OOX Marketplace"
                                     className="relative w-full h-auto max-w-[400px] mx-auto drop-shadow-[0_0_30px_rgba(var(--primary),0.2)] group-hover:scale-105 transition-transform duration-500"
                                 />
