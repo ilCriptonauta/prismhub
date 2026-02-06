@@ -437,8 +437,8 @@ export const PROJECTS_DATA: Project[] = [
         links: {
             twitter: "https://x.com/StanWilscott"
         },
-        image: "/stan-wilscott-logo.jpg",
-        bannerImage: "/stan-wilscott-banner.jpg",
+        image: "/stan-wilscott-logo.png",
+        bannerImage: "/stan-wilscott-banner.png",
         ooxCollections: [
             { label: "Empyreans", url: "https://oox.art/marketplace/collections/EMP-897b49" },
             { label: "Olive Grove", url: "https://oox.art/marketplace/collections/OLVGROVE-90fae5" }
@@ -502,7 +502,7 @@ export const PROJECTS_DATA: Project[] = [
             telegram: "https://t.me/OwlCityX"
         },
         image: "/owlcityx-logo.jpg",
-        bannerImage: "/owlcityx-banner.jpg",
+        bannerImage: "/owlcityx-banner.png",
         ooxCollections: [
             { label: "OwlCityX", url: "https://oox.art/marketplace/collections/CREATOROCX-b96f26" },
             { label: "OwlCityX Stage II", url: "https://oox.art/marketplace/collections/OCXSII-26bb89" }
