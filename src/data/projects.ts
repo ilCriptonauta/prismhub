@@ -85,7 +85,7 @@ export const PROJECTS_DATA: Project[] = [
     {
         id: "2",
         slug: "owlking7",
-        name: "OwlKing7",
+        name: "KingOwl7 | KO7",
         description: "Digital art creator. Exploring how Web3 can empower creators, collectors, and communities. My work focuses on surreal and conceptual visuals, using digital art as a way to question systems, identity and participation in the digital age.",
         category: "Artists",
         tags: ["Pixel Art", "Digital Identity", "Fine Art"],
