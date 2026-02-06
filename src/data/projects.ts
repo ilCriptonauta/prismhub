@@ -444,5 +444,26 @@ export const PROJECTS_DATA: Project[] = [
             { label: "Olive Grove", url: "https://oox.art/marketplace/collections/OLVGROVE-90fae5" }
         ],
         isVerifiedCreative: true
+    },
+    {
+        id: "20",
+        slug: "bloopx",
+        name: "BloopX",
+        description: "Bloopx is a Comic / YouTube series NFT project on MvX.",
+        category: "NFTS Project",
+        tags: ["Comic", "YouTube", "NFT Series"],
+        status: "active",
+        links: {
+            twitter: "https://x.com/BloopXNFT",
+            discord: "https://discord.gg/Ge77s4Km2Z",
+            telegram: "https://t.me/BloopXNft"
+        },
+        image: "/bloopx-logo.jpg",
+        bannerImage: "/bloopx-banner.jpg",
+        ooxCollections: [
+            { label: "BLOOPX", url: "https://oox.art/marketplace/collections/BLOOPX-1ced34" }
+        ],
+        isDailyBuilder: true,
+        isVerifiedCreative: true
     }
 ];
