@@ -507,6 +507,9 @@ export const PROJECTS_DATA: Project[] = [
         },
         image: "/boogas-logo.jpg",
         bannerImage: "/boogas-banner.jpg",
+        ooxCollections: [
+            { label: "Boogas", url: "https://oox.art/marketplace/collections/BOOGAS-afc98d" }
+        ],
         isDailyBuilder: true,
         isVerifiedCreative: true
     }
