@@ -86,14 +86,19 @@ export const PROJECTS_DATA: Project[] = [
         id: "2",
         slug: "owlking7",
         name: "OwlKing7",
-        description: "Visionary independent artist pushing the boundaries of pixel art and digital identity on MultiversX.",
+        description: "Digital art creator. Exploring how Web3 can empower creators, collectors, and communities. My work focuses on surreal and conceptual visuals, using digital art as a way to question systems, identity and participation in the digital age.",
         category: "Artists",
         tags: ["Pixel Art", "Digital Identity", "Fine Art"],
         status: "active",
-        links: { website: "https://multiversx.com", twitter: "https://twitter.com" },
+        links: {
+            twitter: "https://x.com/KingOwl7_",
+            telegram: "https://t.me/KO7ORIGINALS"
+        },
         image: "/owlking-logo.jpg",
-        bannerImage: "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?auto=format&fit=crop&q=80&w=1000",
-        ooxCollections: ["OWL-777777"],
+        bannerImage: "/owlking-banner.jpg",
+        ooxCollections: [
+            { label: "KO7Gridfall", url: "https://oox.art/marketplace/collections/KO7GF-044047" }
+        ],
         isVerifiedCreative: true
     },
     {
