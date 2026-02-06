@@ -44,6 +44,11 @@ export function Footer() {
                                 Open OOX
                             </a>
                         </li>
+                        <li>
+                            <a href="https://onionxlabs.gitbook.io/onionxlabs-docs/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                                Full DOCS
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
