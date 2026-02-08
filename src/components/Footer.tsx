@@ -32,6 +32,11 @@ export function Footer() {
                                 Leaderboard
                             </Link>
                         </li>
+                        <li>
+                            <Link href="/events" className="hover:text-primary transition-colors font-medium">
+                                Events
+                            </Link>
+                        </li>
                     </ul>
                 </div>
 

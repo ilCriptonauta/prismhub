@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer";
 import { PROJECTS_DATA, Project } from "@/data/projects";
 import { useEffect, useState, useMemo } from "react";
 import { getAllVotes } from "@/lib/mx-votes";
+import { STREAK_RANKING_DATA } from "@/data/streaks";
 
 // Types for ranking
 interface RankedProject extends Project {
@@ -182,10 +183,140 @@ export default function RankingPage() {
                         </div>
                     </Card>
                 </motion.div>
+
+                {/* xPortal Streaks Ranking Section */}
+                <div className="max-w-6xl mx-auto pt-32 space-y-16">
+                    <div className="text-center space-y-4">
+                        <motion.h2
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="text-4xl md:text-5xl font-black text-text-primary uppercase tracking-tight"
+                        >
+                            xPortal <span className="text-primary">Social</span> Module
+                        </motion.h2>
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 }}
+                            className="text-xl text-text-secondary font-medium"
+                        >
+                            Monthly top streak holders across the MultiversX ecosystem
+                        </motion.p>
+                    </div>
+
+                    <div className="relative pt-12">
+                        {/* Background glow for the top 3 */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-primary/5 blur-[100px] rounded-full -z-10" />
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-end max-w-5xl mx-auto">
+                            {/* Sort data to show 2, 1, 3 for the podio effect */}
+                            {[
+                                STREAK_RANKING_DATA.find(u => u.rank === 2),
+                                STREAK_RANKING_DATA.find(u => u.rank === 1),
+                                STREAK_RANKING_DATA.find(u => u.rank === 3)
+                            ].map((user, index) => (
+                                user && (
+                                    <motion.div
+                                        key={user.id}
+                                        initial={{ opacity: 0, y: 40 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: 0.1 * (index + 1) }}
+                                        className={user.rank === 1 ? 'order-1 md:order-2' : user.rank === 2 ? 'order-2 md:order-1' : 'order-3'}
+                                    >
+                                        <StreakUserCard
+                                            user={user}
+                                            color={user.rank === 1 ? "yellow" : user.rank === 2 ? "slate" : "orange"}
+                                            isMain={user.rank === 1}
+                                        />
+                                    </motion.div>
+                                )
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <Footer />
         </main>
+    );
+}
+
+function StreakUserCard({ user, color, isMain = false }: { user: any, color: "yellow" | "slate" | "orange", isMain?: boolean }) {
+    const colorClasses = {
+        yellow: "from-yellow-400 to-amber-600 shadow-amber-500/20 ring-yellow-400/50",
+        slate: "from-slate-300 to-slate-500 shadow-slate-500/20 ring-slate-400/50",
+        orange: "from-orange-400 to-red-600 shadow-orange-500/20 ring-orange-400/50"
+    };
+
+    const gradientBorder = {
+        yellow: "border-yellow-400/30",
+        slate: "border-slate-400/30",
+        orange: "border-orange-400/30"
+    };
+
+    return (
+        <div className={`flex flex-col items-center gap-6 ${isMain ? 'mb-12' : 'mb-0'}`}>
+            <div className="relative group">
+                {/* Avatar Circle */}
+                <div className={`
+                    relative rounded-full p-1.5 transition-transform duration-500 group-hover:scale-105
+                    bg-gradient-to-br ${colorClasses[color]} ring-4 ring-offset-4 ring-offset-background
+                    ${isMain ? 'w-48 h-48 md:w-56 md:h-56' : 'w-36 h-36 md:w-40 md:h-40'}
+                `}>
+                    <div className="w-full h-full rounded-full overflow-hidden bg-surface relative">
+                        {user.avatar ? (
+                            <img
+                                src={user.avatar}
+                                alt={user.username}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                    // Fallback if image fails to load
+                                    (e.target as HTMLImageElement).style.display = 'none';
+                                    (e.target as HTMLImageElement).parentElement?.classList.add('flex-center');
+                                }}
+                            />
+                        ) : null}
+
+                        {/* Fallback Rank Number (visible if no avatar or image fails) */}
+                        {!user.avatar && (
+                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-surface to-surface/50">
+                                <span className={`font-black tracking-tighter text-text-tertiary/20 ${isMain ? 'text-8xl' : 'text-6xl'}`}>
+                                    {user.rank}
+                                </span>
+                            </div>
+                        )}
+
+                        {/* Rank Circle Overlay */}
+                        <div className={`
+                            absolute -bottom-1 left-1/2 -translate-x-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-black text-lg md:text-xl text-white shadow-xl
+                            bg-gradient-to-br ${colorClasses[color]}
+                        `}>
+                            {user.rank}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Particle effects for rank 1 */}
+                {isMain && (
+                    <div className="absolute -inset-4 bg-primary/20 blur-2xl rounded-full -z-10 animate-pulse" />
+                )}
+            </div>
+
+            <div className="text-center space-y-2">
+                <h3 className="text-xl md:text-2xl font-black text-text-primary tracking-tight">
+                    {user.username}
+                </h3>
+                <div className={`
+                    inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold tracking-wider
+                    bg-surface/50 border backdrop-blur-md ${gradientBorder[color]} text-text-secondary
+                `}>
+                    {user.streak.toLocaleString()} POINTS
+                </div>
+            </div>
+        </div>
     );
 }
 
