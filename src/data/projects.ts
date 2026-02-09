@@ -182,14 +182,20 @@ export const PROJECTS_DATA: Project[] = [
         id: "8",
         slug: "versus-projects",
         name: "Versus Projects",
-        description: "A legendary collection of fantasy characters and mystical creatures, building a competitive and immersive ecosystem on MultiversX.",
+        description: "Options since 2022",
         category: "NFTS Project",
         tags: ["PFP", "Fantasy", "Competitive"],
         status: "active",
-        links: { twitter: "https://twitter.com" },
+        links: {
+            twitter: "https://x.com/VersusProjects",
+            website: "https://linktr.ee/versus_projects"
+        },
         image: "/versus-logo.jpg",
         bannerImage: "/versus-banner-new.jpg",
-        ooxCollections: ["VERSUS-123456"]
+        ooxCollections: [
+            { label: "VersusKraad", url: "https://oox.art/marketplace/collections/VRSKRAAD-d3e816" },
+            { label: "VersusEnyath", url: "https://oox.art/marketplace/collections/VRSENYATH-4f2c95" }
+        ]
     },
     {
         id: "9",
