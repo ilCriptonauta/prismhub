@@ -1,10 +1,12 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Calendar, Vote, ArrowRight, Check, Sparkles, AlertCircle } from "lucide-react";
+import { X, Calendar, Vote, ArrowRight, Check, Sparkles, AlertCircle, Share2 } from "lucide-react";
 import { Event } from "@/data/events";
 import { Button } from "./modern-ui/button";
 import Link from "next/link";
+import { useState } from "react";
+import { slugify } from "@/utils/slugify";
 
 interface EventDetailModalProps {
     event: Event | null;
@@ -13,10 +15,20 @@ interface EventDetailModalProps {
 }
 
 export function EventDetailModal({ event, isOpen, onClose }: EventDetailModalProps) {
+    const [copied, setCopied] = useState(false);
+
     if (!event) return null;
 
     const isOnxVote = event.id === "1";
     const isBearHunt = event.id === "3";
+
+    const handleShare = () => {
+        const slug = slugify(event.title);
+        const url = `${window.location.origin}/events#${slug}`;
+        navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     return (
         <AnimatePresence>
@@ -51,12 +63,25 @@ export function EventDetailModal({ event, isOpen, onClose }: EventDetailModalPro
                                 </>
                             )}
 
-                            <button
-                                onClick={onClose}
-                                className="absolute top-6 right-6 p-2 bg-background/50 hover:bg-background/80 backdrop-blur-md rounded-full text-text-primary transition-colors z-50 group"
-                            >
-                                <X className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" />
-                            </button>
+                            <div className="absolute top-6 right-6 flex items-center gap-2 z-50">
+                                <button
+                                    onClick={handleShare}
+                                    className="p-2 bg-background/50 hover:bg-background/80 backdrop-blur-md rounded-full text-text-primary transition-all transform hover:scale-110 active:scale-95 group"
+                                    title="Share Event"
+                                >
+                                    {copied ? (
+                                        <Check className="w-5 h-5 text-success" />
+                                    ) : (
+                                        <Share2 className="w-5 h-5 group-hover:text-primary transition-colors" />
+                                    )}
+                                </button>
+                                <button
+                                    onClick={onClose}
+                                    className="p-2 bg-background/50 hover:bg-background/80 backdrop-blur-md rounded-full text-text-primary transition-colors group"
+                                >
+                                    <X className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" />
+                                </button>
+                            </div>
                         </div>
 
                         <div className="p-8 md:p-10 space-y-8 overflow-y-auto">

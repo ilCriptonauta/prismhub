@@ -8,8 +8,9 @@ import { Card, CardDecoration } from "@/components/modern-ui/card";
 import { Button } from "@/components/modern-ui/button";
 import { EVENTS_DATA, Event } from "@/data/events";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EventDetailModal } from "@/components/EventDetailModal";
+import { slugify } from "@/utils/slugify";
 
 export default function EventsPage() {
     const featuredEvent = EVENTS_DATA.find(e => e.id === "1") || EVENTS_DATA[0];
@@ -26,6 +27,18 @@ export default function EventsPage() {
         setSelectedEvent(event);
         setIsModalOpen(true);
     };
+
+    // Handle initial hash to open modal
+    useEffect(() => {
+        const hash = window.location.hash.substring(1);
+        if (hash) {
+            const eventMatch = EVENTS_DATA.find(e => slugify(e.title) === hash);
+            if (eventMatch) {
+                setSelectedEvent(eventMatch);
+                setIsModalOpen(true);
+            }
+        }
+    }, []);
 
     return (
         <main className="min-h-screen bg-background selection:bg-primary/20">
