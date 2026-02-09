@@ -1,6 +1,19 @@
-# Changelog - PRISM HUB 💎✨
+# Changelog - OOX HUB 💎✨
 
-Tutti i cambiamenti significativi al progetto PRISM HUB saranno documentati in questo file.
+Tutti i cambiamenti significativi al progetto OOX HUB saranno documentati in questo file.
+
+## [1.3.0] - 2026-02-09
+### Aggiunto
+- **Nuovo Progetto**: Inserito **XperienceClubPoker** con dettagli completi (descrizione, social, collezioni OOX ed estetica neon personalizzata).
+- **Condivisione Eventi**: Implementato sistema di URL univoche per ogni evento basate sul titolo (slugify).
+- **Social Sharing**: Aggiunto tasto "Condividi" nelle modali degli eventi per copiare l'URL diretta negli appunti.
+- **Badge Conteggio**: Inseriti i contatori (progetti e artisti) all'interno dei tab di navigazione dell'Hub per una panoramica immediata dei partecipanti.
+- **Deep Linking**: Supporto per l'apertura automatica delle modali eventi tramite hash nell'URL.
+
+### Aggiornato
+- **Rebranding Finale**: Sostituzione globale di Prism Hub con **OOX Hub**.
+- **Versus Projects**: Aggiornata la descrizione ("Options since 2022"), i link social/sito e aggiunte le nuove collezioni *VersusKraad* e *VersusEnyath*.
+- **UX**: Migliorato il feedback visivo per le azioni di voto e condivisione.
 
 ## [1.2.0] - 2026-01-29
 ### Aggiornato (Card Redesign & Layout)
@@ -9,7 +22,7 @@ Tutti i cambiamenti significativi al progetto PRISM HUB saranno documentati in q
     - Introdotto l'avatar sovrapposto per un'identità visiva più forte.
     - Sostituita la CTA con un più elegante "LEARN MORE".
     - Inseriti i badge di attività (Verified Creative 🛡️ e Daily Builder 🔨) direttamente nel blocco identità dell'avatar.
-- **Brand Restoring**: Ripristinato il logo Prisma originale e il nome PRISM HUB.
+- **Brand Refresh**: Evoluzione dell'identità visiva verso il nuovo ecosistema.
 
 ## [1.1.0] - 2026-01-29
 ### Aggiornato (Creative Pivot)
