@@ -2,7 +2,7 @@
 
 import { Search, SlidersHorizontal, ShieldCheck, Hammer } from "lucide-react";
 import { Button } from "./modern-ui/button";
-import { CATEGORIES } from "@/data/projects";
+import { CATEGORIES, PROJECTS_DATA } from "@/data/projects";
 
 interface SearchAndFiltersProps {
     searchQuery: string;
@@ -17,6 +17,12 @@ export function SearchAndFilters({
     selectedCategory,
     setSelectedCategory,
 }: SearchAndFiltersProps) {
+    const counts = {
+        all: PROJECTS_DATA.length,
+        "NFTS Project": PROJECTS_DATA.filter(p => p.category === "NFTS Project").length,
+        "Artists": PROJECTS_DATA.filter(p => p.category === "Artists").length,
+    };
+
     return (
         <div className="w-full space-y-12">
             {/* Search Bar */}
@@ -46,12 +52,15 @@ export function SearchAndFilters({
                         variant={selectedCategory === null ? "default" : "ghost"}
                         size="sm"
                         onClick={() => setSelectedCategory(null)}
-                        className={`rounded-xl px-6 py-2 font-bold transition-all ${selectedCategory === null
+                        className={`rounded-xl px-6 py-2 font-bold transition-all flex items-center gap-2 ${selectedCategory === null
                             ? "shadow-lg shadow-primary/25 text-white"
                             : "hover:bg-surface-hover text-text-secondary hover:text-text-primary"
                             }`}
                     >
-                        All
+                        <span>All</span>
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded-md ${selectedCategory === null ? "bg-white/20" : "bg-surface"}`}>
+                            {counts.all}
+                        </span>
                     </Button>
                     {CATEGORIES.map((category) => (
                         <Button
@@ -59,12 +68,15 @@ export function SearchAndFilters({
                             variant={selectedCategory === category ? "default" : "ghost"}
                             size="sm"
                             onClick={() => setSelectedCategory(category)}
-                            className={`rounded-xl px-6 py-2 font-bold transition-all ${selectedCategory === category
+                            className={`rounded-xl px-6 py-2 font-bold transition-all flex items-center gap-2 ${selectedCategory === category
                                 ? "shadow-lg shadow-primary/25 text-white"
                                 : "hover:bg-surface-hover text-text-secondary hover:text-text-primary"
                                 }`}
                         >
-                            {category}
+                            <span>{category}</span>
+                            <span className={`text-[10px] px-1.5 py-0.5 rounded-md ${selectedCategory === category ? "bg-white/20" : "bg-surface"}`}>
+                                {counts[category as keyof typeof counts]}
+                            </span>
                         </Button>
                     ))}
                 </div>
