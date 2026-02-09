@@ -531,5 +531,30 @@ export const PROJECTS_DATA: Project[] = [
             { label: "Others", url: "https://oox.art/marketplace/collections/OTHERS-8e1fc7" }
         ],
         isVerifiedCreative: true
+    },
+    {
+        id: "25",
+        slug: "xperience-club-poker",
+        name: "XperienceClubPoker",
+        description: "Welcome to Poker Xperience Club - where poker meets the power of @MultiversX",
+        category: "NFTS Project",
+        tags: ["Poker", "Gaming", "Utility"],
+        status: "active",
+        links: {
+            twitter: "https://x.com/XperiencePoker",
+            discord: "https://discord.gg/qbvDRHMRV",
+            telegram: "https://t.me/XperienceClubPoker"
+        },
+        image: "/xperience-poker-logo.png",
+        bannerImage: "/xperience-poker-banner.png",
+        ooxCollections: [
+            { label: "EliteSeries", url: "https://oox.art/marketplace/collections/ELITEPXC-c73af0" }
+        ],
+        isDailyBuilder: true,
+        isVerifiedCreative: true,
+        colors: {
+            primary: "#ff00ff",
+            secondary: "#00ffff"
+        }
     }
 ];
