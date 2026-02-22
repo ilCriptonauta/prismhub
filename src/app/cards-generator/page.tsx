@@ -89,14 +89,28 @@ export default function CardsGeneratorPage() {
     };
 
     const handleDownload = useCallback(async () => {
-        if (!cardRef.current) return;
+        if (!cardRef.current || !selectedNft) return;
         setIsDownloading(true);
         setIsExporting(true); // Switch to proxy images for CORS
 
-        // Wait for proxy images to load
-        await new Promise(resolve => setTimeout(resolve, 800));
-
         try {
+            // Force proxy image preload to guarantee it's available for the screenshot. 
+            // Crucial for mobile devices / slow networks to prevent blank snapshots.
+            const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(selectedNft.url)}`;
+            await new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = resolve;
+                img.onerror = () => {
+                    console.warn("Proxy image preload failed, proceeding anyway...");
+                    resolve(null);
+                };
+                img.src = proxyUrl;
+            });
+
+            // Extra tiny delay to ensure the DOM is painted and ready
+            await new Promise(resolve => setTimeout(resolve, 100));
+
             const dataUrl = await toPng(cardRef.current, {
                 cacheBust: true,
                 pixelRatio: 3, // High density for 4K quality
@@ -307,15 +321,13 @@ export default function CardsGeneratorPage() {
                                                     ) : filteredNfts.length > 0 ? (
                                                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                                                             {filteredNfts.map((nft) => (
-                                                                <motion.div
+                                                                <div
                                                                     key={nft.identifier}
-                                                                    whileHover={{ y: -5, scale: 1.02 }}
-                                                                    whileTap={{ scale: 0.98 }}
                                                                     onClick={() => {
                                                                         setSelectedNft(nft);
                                                                         setIsSelectionOpen(false);
                                                                     }}
-                                                                    className={`bg-background border rounded-3xl overflow-hidden cursor-pointer group transition-all ${selectedNft?.identifier === nft.identifier ? 'border-primary ring-2 ring-primary/20' : 'border-border/50 hover:border-primary/40'}`}
+                                                                    className={`bg-background border rounded-3xl overflow-hidden cursor-pointer group transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98] ${selectedNft?.identifier === nft.identifier ? 'border-primary ring-2 ring-primary/20' : 'border-border/50 hover:border-primary/40'}`}
                                                                 >
                                                                     <div className="aspect-square overflow-hidden relative">
                                                                         <img
@@ -342,7 +354,7 @@ export default function CardsGeneratorPage() {
                                                                             <span className="text-[10px] font-bold text-text-secondary">{(allVotes[nft.identifier] || 0) * 10} XP</span>
                                                                         </div>
                                                                     </div>
-                                                                </motion.div>
+                                                                </div>
                                                             ))}
                                                         </div>
                                                     ) : (
