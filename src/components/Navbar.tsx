@@ -65,6 +65,9 @@ export function Navbar() {
                             <Link href="/ranking" className="text-sm font-medium text-text-secondary hover:text-primary transition-colors">
                                 Leaderboard
                             </Link>
+                            <Link href="/cards-generator" className="text-sm font-medium text-text-secondary hover:text-primary transition-colors">
+                                Cards Generator
+                            </Link>
                         </div>
                     </div>
 

@@ -37,6 +37,11 @@ export function Footer() {
                                 Events
                             </Link>
                         </li>
+                        <li>
+                            <Link href="/cards-generator" className="hover:text-primary transition-colors font-medium">
+                                Cards Generator
+                            </Link>
+                        </li>
                     </ul>
                 </div>
 

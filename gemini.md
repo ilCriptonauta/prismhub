@@ -85,3 +85,36 @@ Il logo dovrà essere unico e moderno e dovrebbe essere facilmente riconoscibile
 - Per questo progetto dovrai creare un piano di lavoro dettagliato e condividerlo con me per approvazione.
 
 Considera che è il mio primo progetto insieme a te. Sii coerente e cerca di mantenermi aggiornato su tutto il processo. Non avere fretta e non avere fretta di finire il processo. Prenditi il tuo tempo e assicurati di fare un buon lavoro. 
+
+
+**indicazione carta**
+
+Una pagina che permette di trasformare qualsiasi NFTs su rete MultiversX in una carta. Ragioniamo sempre in modalità “mobile first” 
+
+La maggior parte degli NFTs sono in formato quadrato. Questo strumento deve trasformare l’NFT in una carta. 
+
+Come? 
+
+La pagina deve mostrare la struttura di una carta da gioco con al centro un placeholder. 
+
+L’utente che si logga potrà selezionare e scegliere tra i suoi NFTS uno da trasformare in carta. 
+
+L’NFT scelto si andrà a posizionare all’interno della carta nel placeholder e diventerà a tutti gli effetti una carta. 
+
+L’ideale è costruire la carta in formato SVG in maniera tale che possa essere animata. La carta deve ruotare sensibilmente mostrandosi animata. 
+
+Deve essere un componente presente nella pagina ma indipendente con uno stile flat e bordi lievemente marcati al fine di dare un tocco premium alla carta. 
+La carta deve generare una lieve ombra dietro di sé 
+
+La carta deve cambiare colore in base ai punti xp ottenuti dall’nft. 
+
+Ogni carta generata dovrà essere scaricabile in formato PNG. 
+
+La carta deve recuperare i dati dell’NFT e mostrare il titolo nella parte superiore e il numero dell’NFT nella collezione. 
+
+Sotto l’NFT devono apparire le proprietà dell’NFT ma soprattutto ogni carta deve avere dei punti xp. 
+
+Come ottenere i punti xp? 
+
+I punti xp dovranno essere dedotti dai voti che gli nfts prendono sul marketplace OOX. Più un singolo NFTs ha voti, più punti xp ha la carta. 
+fonte da cui trarre ispirazione
