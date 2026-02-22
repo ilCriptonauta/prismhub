@@ -23,7 +23,6 @@ export default function CardsGeneratorPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [isDownloading, setIsDownloading] = useState(false);
     const [isExporting, setIsExporting] = useState(false);
-    const [exportImageBase64, setExportImageBase64] = useState<string | null>(null);
     const [isSelectionOpen, setIsSelectionOpen] = useState(false);
     const [floorPrice, setFloorPrice] = useState<number>(0);
     const cardRef = useRef<HTMLDivElement>(null);
@@ -88,40 +87,31 @@ export default function CardsGeneratorPage() {
         });
         unlockPanelManager.openUnlockPanel();
     };
-
     const handleDownload = useCallback(async () => {
         if (!cardRef.current || !selectedNft) return;
         setIsDownloading(true);
         setIsExporting(true); // Switch to proxy images for CORS
 
         try {
-            // Fetch the image from our proxy and convert directly to Base64 in Browser.
-            // This is the bulletproof method to bypass iOS Safari's aggressive Canvas tracking 
-            // and html-to-image crossOrigin rendering bugs.
-            const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(selectedNft.url)}`;
-            const response = await fetch(proxyUrl);
-
-            if (!response.ok) {
-                throw new Error(`Proxy failed with status ${response.status}`);
+            // Force proxy image preload to guarantee it's in browser cache before we screenshot
+            // This prevents Safari "empty image" errors while staying within memory limits
+            if (selectedNft.url.startsWith('http')) {
+                const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(selectedNft.url)}`;
+                await new Promise((resolve) => {
+                    const img = new Image();
+                    img.crossOrigin = "anonymous";
+                    img.onload = resolve;
+                    img.onerror = resolve; // Proceed anyway on error
+                    img.src = proxyUrl;
+                });
             }
 
-            const blob = await response.blob();
-
-            const base64data = await new Promise<string>((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result as string);
-                reader.onerror = reject;
-                reader.readAsDataURL(blob);
-            });
-
-            setExportImageBase64(base64data);
-
-            // Extra delay to ensure iOS Safari has fully decoded and painted the massive base64 image
-            await new Promise(resolve => setTimeout(resolve, 600));
+            // Delay to ensure React has fully painted the `isExporting` layout state
+            await new Promise(resolve => setTimeout(resolve, 250));
 
             const dataUrl = await toPng(cardRef.current, {
-                cacheBust: false, // Do not cacheBust, it forces weird query params that break iOS SVG foreignObject image fetches
-                pixelRatio: 2, // Retina quality (x2). Limit to 2x to avoid iOS Canvas total memory limit crashes (blank images)
+                cacheBust: true, // Absolutely essential for Safari iOS to bust tainted CORS cache
+                pixelRatio: 2, // Retina quality (x2). Max safe ratio for massive canvases on iOS Safari
                 backgroundColor: "transparent",
                 style: {
                     transform: "none",
@@ -145,7 +135,6 @@ export default function CardsGeneratorPage() {
         } finally {
             setIsDownloading(false);
             setIsExporting(false); // Switch back to original images for display
-            setExportImageBase64(null);
         }
     }, [selectedNft]);
 
