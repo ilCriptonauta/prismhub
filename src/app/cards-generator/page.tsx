@@ -100,6 +100,11 @@ export default function CardsGeneratorPage() {
             // and html-to-image crossOrigin rendering bugs.
             const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(selectedNft.url)}`;
             const response = await fetch(proxyUrl);
+
+            if (!response.ok) {
+                throw new Error(`Proxy failed with status ${response.status}`);
+            }
+
             const blob = await response.blob();
 
             const base64data = await new Promise<string>((resolve, reject) => {
@@ -111,12 +116,12 @@ export default function CardsGeneratorPage() {
 
             setExportImageBase64(base64data);
 
-            // Extra delay to ensure React has painted the base64 image into the DOM
-            await new Promise(resolve => setTimeout(resolve, 300));
+            // Extra delay to ensure iOS Safari has fully decoded and painted the massive base64 image
+            await new Promise(resolve => setTimeout(resolve, 600));
 
             const dataUrl = await toPng(cardRef.current, {
-                cacheBust: true,
-                pixelRatio: 3, // High density for 4K quality
+                cacheBust: false, // Do not cacheBust, it forces weird query params that break iOS SVG foreignObject image fetches
+                pixelRatio: 2, // Retina quality (x2). Limit to 2x to avoid iOS Canvas total memory limit crashes (blank images)
                 backgroundColor: "transparent",
                 style: {
                     transform: "none",

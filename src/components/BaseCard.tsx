@@ -80,18 +80,17 @@ export function BaseCard({
     // Reset and sync image state
     React.useEffect(() => {
         setImgError(false);
-        let finalImage = image;
 
-        if (isExporting && exportImageBase64) {
-            finalImage = exportImageBase64;
-            // Native render on device from base64 string
-        } else if (isExporting && image) {
-            finalImage = `/api/proxy-image?url=${encodeURIComponent(image)}`;
-        } else {
-            setImgLoading(true);
+        if (isExporting) {
+            if (exportImageBase64) {
+                setCurrentImage(exportImageBase64);
+            }
+            // If exporting but base64 is not yet ready, do NOTHING. Keep the current image visible.
+            return;
         }
 
-        setCurrentImage(finalImage);
+        setImgLoading(true);
+        setCurrentImage(image);
     }, [image, isExporting, exportImageBase64]);
 
     React.useEffect(() => {
@@ -171,16 +170,16 @@ export function BaseCard({
                         <div className={`w-full h-full ${isDarkMode ? 'bg-slate-100' : 'bg-slate-900'} border-4 ${isDarkMode ? 'border-white' : 'border-slate-800'} rounded-[32px] overflow-hidden shadow-2xl relative flex items-center justify-center transition-all ${onArtClick ? 'hover:border-primary/50' : ''}`}>
                             {currentImage && !imgError ? (
                                 <>
-                                    {imgLoading && (
-                                        <div className={`absolute inset-0 flex items-center justify-center ${isDarkMode ? 'bg-slate-200' : 'bg-slate-800'}`}>
+                                    {imgLoading && !isExporting && (
+                                        <div className={`absolute inset-0 flex items-center justify-center ${isDarkMode ? 'bg-slate-200' : 'bg-slate-800'} z-10`}>
                                             <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                                         </div>
                                     )}
                                     <img
                                         src={currentImage}
                                         alt="nft"
-                                        className={`w-full h-full object-cover transition-opacity duration-500 ${imgLoading ? 'opacity-0' : 'opacity-100'}`}
-                                        crossOrigin={isExporting ? undefined : undefined} // No crossOrigin needed at all here since proxy handles it or base64 handles it
+                                        className={`w-full h-full object-cover ${isExporting ? 'opacity-100' : `transition-opacity duration-500 ${imgLoading ? 'opacity-0' : 'opacity-100'}`}`}
+                                        crossOrigin={undefined}
                                         onLoad={() => setImgLoading(false)}
                                         onError={() => {
                                             if (fallbackImage && currentImage !== fallbackImage) {
