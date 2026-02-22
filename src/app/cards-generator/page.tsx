@@ -114,7 +114,7 @@ export default function CardsGeneratorPage() {
             const dataUrl = await toPng(cardRef.current, {
                 cacheBust: true,
                 pixelRatio: 3, // High density for 4K quality
-                backgroundColor: "#0F172A",
+                backgroundColor: "transparent",
                 style: {
                     transform: "none",
                 },
