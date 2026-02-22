@@ -18,6 +18,7 @@ interface BaseCardProps {
     traits?: Array<{ trait_type: string; value: string }>;
     onArtClick?: () => void;
     isExporting?: boolean;
+    exportImageBase64?: string | null;
     floorPrice?: number;
 }
 
@@ -33,6 +34,7 @@ export function BaseCard({
     traits = [],
     onArtClick,
     isExporting = false,
+    exportImageBase64 = null,
     floorPrice
 }: BaseCardProps) {
     const { theme, resolvedTheme } = useTheme();
@@ -80,15 +82,17 @@ export function BaseCard({
         setImgError(false);
         let finalImage = image;
 
-        if (isExporting && image) {
+        if (isExporting && exportImageBase64) {
+            finalImage = exportImageBase64;
+            // Native render on device from base64 string
+        } else if (isExporting && image) {
             finalImage = `/api/proxy-image?url=${encodeURIComponent(image)}`;
-            // Do not set imgLoading to true during export switch to avoid fade-in delay and placeholder snapshot
         } else {
             setImgLoading(true);
         }
 
         setCurrentImage(finalImage);
-    }, [image, isExporting]);
+    }, [image, isExporting, exportImageBase64]);
 
     React.useEffect(() => {
         setMounted(true);
@@ -176,7 +180,7 @@ export function BaseCard({
                                         src={currentImage}
                                         alt="nft"
                                         className={`w-full h-full object-cover transition-opacity duration-500 ${imgLoading ? 'opacity-0' : 'opacity-100'}`}
-                                        crossOrigin={isExporting ? "anonymous" : undefined}
+                                        crossOrigin={isExporting ? undefined : undefined} // No crossOrigin needed at all here since proxy handles it or base64 handles it
                                         onLoad={() => setImgLoading(false)}
                                         onError={() => {
                                             if (fallbackImage && currentImage !== fallbackImage) {

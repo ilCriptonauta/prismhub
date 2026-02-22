@@ -23,6 +23,7 @@ export default function CardsGeneratorPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [isDownloading, setIsDownloading] = useState(false);
     const [isExporting, setIsExporting] = useState(false);
+    const [exportImageBase64, setExportImageBase64] = useState<string | null>(null);
     const [isSelectionOpen, setIsSelectionOpen] = useState(false);
     const [floorPrice, setFloorPrice] = useState<number>(0);
     const cardRef = useRef<HTMLDivElement>(null);
@@ -94,22 +95,24 @@ export default function CardsGeneratorPage() {
         setIsExporting(true); // Switch to proxy images for CORS
 
         try {
-            // Force proxy image preload to guarantee it's available for the screenshot. 
-            // Crucial for mobile devices / slow networks to prevent blank snapshots.
+            // Fetch the image from our proxy and convert directly to Base64 in Browser.
+            // This is the bulletproof method to bypass iOS Safari's aggressive Canvas tracking 
+            // and html-to-image crossOrigin rendering bugs.
             const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(selectedNft.url)}`;
-            await new Promise((resolve, reject) => {
-                const img = new Image();
-                img.crossOrigin = "anonymous";
-                img.onload = resolve;
-                img.onerror = () => {
-                    console.warn("Proxy image preload failed, proceeding anyway...");
-                    resolve(null);
-                };
-                img.src = proxyUrl;
+            const response = await fetch(proxyUrl);
+            const blob = await response.blob();
+
+            const base64data = await new Promise<string>((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result as string);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
             });
 
-            // Extra tiny delay to ensure the DOM is painted and ready
-            await new Promise(resolve => setTimeout(resolve, 100));
+            setExportImageBase64(base64data);
+
+            // Extra delay to ensure React has painted the base64 image into the DOM
+            await new Promise(resolve => setTimeout(resolve, 300));
 
             const dataUrl = await toPng(cardRef.current, {
                 cacheBust: true,
@@ -137,6 +140,7 @@ export default function CardsGeneratorPage() {
         } finally {
             setIsDownloading(false);
             setIsExporting(false); // Switch back to original images for display
+            setExportImageBase64(null);
         }
     }, [selectedNft]);
 
