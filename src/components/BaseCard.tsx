@@ -18,7 +18,6 @@ interface BaseCardProps {
     traits?: Array<{ trait_type: string; value: string }>;
     onArtClick?: () => void;
     isExporting?: boolean;
-    exportImageBase64?: string | null;
     floorPrice?: number;
 }
 
@@ -34,7 +33,6 @@ export function BaseCard({
     traits = [],
     onArtClick,
     isExporting = false,
-    exportImageBase64 = null,
     floorPrice
 }: BaseCardProps) {
     const { theme, resolvedTheme } = useTheme();
@@ -81,17 +79,17 @@ export function BaseCard({
     React.useEffect(() => {
         setImgError(false);
 
-        if (isExporting) {
-            if (exportImageBase64) {
-                setCurrentImage(exportImageBase64);
-            }
-            // If exporting but base64 is not yet ready, do NOTHING. Keep the current image visible.
-            return;
+        let finalImage = image;
+        if (isExporting && image) {
+            finalImage = `/api/proxy-image?url=${encodeURIComponent(image)}`;
         }
 
-        setImgLoading(true);
-        setCurrentImage(image);
-    }, [image, isExporting, exportImageBase64]);
+        if (!isExporting) {
+            setImgLoading(true);
+        }
+
+        setCurrentImage(finalImage);
+    }, [image, isExporting]);
 
     React.useEffect(() => {
         setMounted(true);
@@ -179,7 +177,7 @@ export function BaseCard({
                                         src={currentImage}
                                         alt="nft"
                                         className={`w-full h-full object-cover ${isExporting ? 'opacity-100' : `transition-opacity duration-500 ${imgLoading ? 'opacity-0' : 'opacity-100'}`}`}
-                                        crossOrigin={undefined}
+                                        crossOrigin={isExporting ? "anonymous" : undefined}
                                         onLoad={() => setImgLoading(false)}
                                         onError={() => {
                                             if (fallbackImage && currentImage !== fallbackImage) {
