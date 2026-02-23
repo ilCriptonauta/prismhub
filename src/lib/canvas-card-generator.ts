@@ -282,8 +282,25 @@ export async function generateCanvasCard(params: {
     ctx.fillStyle = c.textSec;
     ctx.font = '900 8px "Google Sans Flex", sans-serif';
     ctx.letterSpacing = '1.5px';
-    const floorStr = floorPrice && floorPrice > 0 ? `FLOOR: ${floorPrice.toFixed(2)} EGLD` : 'SECURED';
-    ctx.fillText(floorStr.toUpperCase(), 528, footY + 6);
+    const floorStr = floorPrice && floorPrice > 0 ? `FLOOR: ${floorPrice.toLocaleString(undefined, { maximumFractionDigits: 2 })} EGLD` : 'SECURED';
+    const displayFloorStr = floorStr.toUpperCase();
+    ctx.fillText(displayFloorStr, 528, footY + 6);
+
+    // Calculate exact position to dynamically draw the ShieldCheck icon next to it
+    const floorWidth = ctx.measureText(displayFloorStr).width;
+    const shieldX = 528 - floorWidth - 14; // Icon is roughly 10x10, so 14 pixels left to give a gap
+    const shieldY = footY + 5;
+
+    // Render Lucide's ShieldCheck SVG into Canvas directly via DataURL
+    const shieldSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2-1 4-3 6-4 2 1 4 3 6 4a1 1 0 0 1 1 1v7z"/><path d="m9 12 2 2 4-4"/></svg>`;
+    const shieldImg = new Image();
+    // Use universal base64 for svg (btoa in browser, Buffer in edge if needed, but this runs ONLY on browser)
+    shieldImg.src = 'data:image/svg+xml;base64,' + btoa(shieldSvg);
+    await new Promise(resolve => {
+        shieldImg.onload = resolve;
+        shieldImg.onerror = resolve;
+    });
+    ctx.drawImage(shieldImg, shieldX, shieldY, 10, 10);
 
     ctx.fillStyle = c.copyRight; // More faded
     ctx.font = 'bold 6px "Google Sans Flex", sans-serif';
