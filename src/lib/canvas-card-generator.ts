@@ -166,20 +166,41 @@ export async function generateCanvasCard(params: {
     }
 
     // --- 4. XP Badge floating bottom right of image ---
-    const badgeW = 90;
+    const xpText = `${Math.floor(xp)} XP`;
+    ctx.font = 'italic 900 13px "Google Sans Flex", sans-serif';
+    const xpTextWidth = ctx.measureText(xpText).width;
+    const iconWidth = 14;
+    const gap = 6;
+    const horizontalPadding = 32; // px-4 is 16px each side
+    const badgeW = xpTextWidth + iconWidth + gap + horizontalPadding;
     const badgeH = 28;
-    const badgeX = imgX + imgW - badgeW - 16;
-    const badgeY = imgY + imgH - 14;
+    const badgeX = imgX + imgW + 8 - badgeW; // -right-2 = 8px stick out
+    const badgeY = imgY + imgH + 12 - badgeH; // -bottom-3 = 12px stick out
 
     const grad = createLinearGradient(badgeX, badgeY, badgeX + badgeW, badgeY + badgeH, rarity.colorFrom, rarity.colorTo);
-    roundRectBorder(badgeX, badgeY, badgeW, badgeH, 14, grad);
+    roundRectBorder(badgeX, badgeY, badgeW, badgeH, 14, grad, 'rgba(255,255,255,0.2)', 1);
+
+    // Render Sparkles SVG (from lucide-react)
+    const xpSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>`;
+    const xpImg = new Image();
+    xpImg.src = 'data:image/svg+xml;base64,' + btoa(xpSvg);
+    await new Promise(resolve => {
+        xpImg.onload = resolve;
+        xpImg.onerror = resolve;
+    });
+
+    const centerY = badgeY + badgeH / 2;
+    const contentStartX = badgeX + 16; // left padding
+    ctx.drawImage(xpImg, contentStartX, centerY - iconWidth / 2, iconWidth, iconWidth);
 
     // Text on badge is always white regardless of theme because badge is colored
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'italic 900 12px "Google Sans Flex", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(`✦ ${Math.floor(xp)} XP`, badgeX + badgeW / 2, badgeY + 8);
     ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(xpText, contentStartX + iconWidth + gap, centerY + 1);
+
+    // Output restore defaults
+    ctx.textBaseline = 'top';
 
     // --- 5. Traits Header ---
     const traitsHeaderY = imgY + imgH + 30;

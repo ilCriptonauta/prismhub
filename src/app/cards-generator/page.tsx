@@ -207,7 +207,7 @@ export default function CardsGeneratorPage() {
             setExportCb(undefined);
             setBase64Image(null);
         }
-    }, [selectedNft, base64Image]);
+    }, [selectedNft, base64Image, allVotes, floorPrice, isDarkMode]);
 
     const filteredNfts = nfts.filter(nft =>
         nft.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
