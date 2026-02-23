@@ -12,7 +12,6 @@ import Link from "next/link";
 import { useGetIsLoggedIn } from "@multiversx/sdk-dapp/out/react/account/useGetIsLoggedIn";
 import { useUserNFTs, NFT } from "@/hooks/useUserNFTs";
 import { getAllVotes, getSingleNftVotes, getCollectionFloorPrice } from "@/lib/mx-votes";
-import { toPng } from "html-to-image";
 import { UnlockPanelManager } from "@multiversx/sdk-dapp/out/managers/UnlockPanelManager/UnlockPanelManager";
 
 export default function CardsGeneratorPage() {
@@ -91,125 +90,73 @@ export default function CardsGeneratorPage() {
         unlockPanelManager.openUnlockPanel();
     };
     const handleDownload = useCallback(async () => {
-        if (!cardRef.current || !selectedNft) return;
+        if (!selectedNft) return;
         setIsDownloading(true);
 
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-        const timestamp = new Date().getTime().toString();
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
         try {
-            const fileName = `oox-card-${selectedNft?.name.replace(/\s+/g, '-').toLowerCase() || "creative"}.png`;
+            const fileName = `oox-card-${selectedNft.name.replace(/\s+/g, '-').toLowerCase() || 'creative'}.png`;
 
-            // 1. Enter export mode and pre-fetch image as Base64
-            setIsExporting(true);
-            setExportCb(timestamp);
+            // Build the server-side card generation URL
+            const traits = selectedNft.metadata?.attributes || (selectedNft.attributes as any) || [];
+            const rarityTrait = traits.find((t: any) =>
+                t.trait_type?.toLowerCase() === 'rarity' || t.trait_type?.toLowerCase() === 'rank'
+            )?.value || '';
 
-            if (selectedNft.url.startsWith('http')) {
-                const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(selectedNft.url)}&cb=${timestamp}`;
-                const response = await fetch(proxyUrl);
-                if (!response.ok) throw new Error("Failed to fetch image via proxy");
+            const params = new URLSearchParams({
+                title: selectedNft.name || 'OOX CREATIVE',
+                nftNumber: `#${selectedNft.identifier.split('-').pop() || '0001'}`,
+                votes: String(allVotes[selectedNft.identifier] || 0),
+                imageUrl: encodeURIComponent(selectedNft.url || ''),
+                floorPrice: String(floorPrice || 0),
+                traits: encodeURIComponent(JSON.stringify(traits.slice(0, 4))),
+                rarityTrait,
+            });
 
-                const blob = await response.blob();
-                const b64 = await new Promise<string>((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result as string);
-                    reader.onerror = reject;
-                    reader.readAsDataURL(blob);
-                });
-                setBase64Image(b64);
-            }
+            // Fetch the server-rendered PNG
+            const response = await fetch(`/api/generate-card?${params.toString()}`);
+            if (!response.ok) throw new Error(`Server returned ${response.status}`);
 
-            // 2. Wait for React to render the Base64 image and UI state
-            await new Promise(resolve => setTimeout(resolve, isIOS ? 1000 : 300));
+            const blob = await response.blob();
+            const objectUrl = URL.createObjectURL(blob);
 
-            // 3. SECURE RENDER: Ensure the image is DECODED in the browser's GPU buffer
-            if (cardRef.current) {
-                const img = cardRef.current.querySelector('img[alt="nft"]') as HTMLImageElement;
-                if (img) {
-                    try {
-                        // This forces the browser to actually decode the Base64 bytes into pixels
-                        if (img.decode) {
-                            await img.decode();
-                        }
-                        // Secondary check: verify image has dimensions
-                        if (img.naturalWidth === 0) {
-                            console.warn("Image naturalWidth is 0, waiting extra...");
-                            await new Promise(r => setTimeout(r, 1000));
-                        }
-                    } catch (e) {
-                        console.error("Decode failed, proceeding anyway", e);
-                    }
-                }
-            }
-
-            // 4. CAPTURE using html-to-image to CANVAS first (more stable on iOS)
-            const options = {
-                pixelRatio: isIOS ? 1.5 : 2, // Scale down slightly for iOS memory limits
-                skipAutoScale: true,
-                cacheBust: false,
-                backgroundColor: "transparent",
-                style: {
-                    transform: "none",
-                    transition: "none",
-                    animation: "none",
-                },
-                filter: (node: any) => {
-                    const exclusionClasses = ['blur-3xl', 'animate-pulse', 'animate-spin'];
-                    if (node.classList) {
-                        return !exclusionClasses.some(cls => node.classList.contains(cls));
-                    }
-                    return true;
-                }
-            };
-
-            const dataUrl = await toPng(cardRef.current, options);
-
-            // 4. Handle the download with iOS specific persistence
-            if (isIOS) {
-                // On iOS, we provide the image in a blob for sharing or a new window
-                // direct "link.click()" is often ignored by Chrome/Safari for dataUrls
-                if (navigator.share) {
-                    try {
-                        const blob = await (await fetch(dataUrl)).blob();
-                        const file = new File([blob], fileName, { type: 'image/png' });
-                        await navigator.share({
-                            files: [file],
-                            title: 'OOX Hub Card',
-                            text: 'Check out my OOX Hub Card!'
-                        });
-                    } catch (shareErr) {
-                        // Fallback: View in new tab for long-press save
-                        const newTab = window.open();
-                        if (newTab) {
-                            newTab.document.write(`<img src="${dataUrl}" style="width:100%; border-radius: 12px;" />`);
-                            newTab.document.title = "Save Image";
-                        }
-                    }
-                } else {
+            if (isIOS && navigator.share) {
+                // iOS Share Sheet - best UX on iPhone
+                try {
+                    const file = new File([blob], fileName, { type: 'image/png' });
+                    await navigator.share({
+                        files: [file],
+                        title: 'OOX Hub Card',
+                        text: 'Check out my OOX Hub Card!',
+                    });
+                } catch {
+                    // Share cancelled or failed, fallback to new tab
                     const newTab = window.open();
                     if (newTab) {
-                        newTab.document.write(`<img src="${dataUrl}" style="width:100%; border-radius: 12px;" />`);
-                        newTab.document.title = "Save Image";
+                        newTab.document.write(`<html><body style="margin:0;background:#000"><img src="${objectUrl}" style="max-width:100%;border-radius:12px;display:block;margin:auto" /></body></html>`);
+                        newTab.document.title = 'Save Image - Long press to save';
                     }
                 }
             } else {
-                const link = document.createElement("a");
+                // Desktop / Android: direct download
+                const link = document.createElement('a');
                 link.download = fileName;
-                link.href = dataUrl;
+                link.href = objectUrl;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
             }
+
+            URL.revokeObjectURL(objectUrl);
         } catch (err: any) {
-            console.error("Failed to download card:", err);
-            alert(`Export failed: ${err.message || 'Unknown error'}`);
+            console.error('Failed to generate card:', err);
+            alert(`Card generation failed: ${err.message || 'Unknown error'}. Please try again.`);
         } finally {
             setIsDownloading(false);
-            setIsExporting(false);
-            setExportCb(undefined);
-            setBase64Image(null);
         }
-    }, [selectedNft, base64Image]);
+    }, [selectedNft, allVotes, floorPrice]);
 
     const filteredNfts = nfts.filter(nft =>
         nft.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

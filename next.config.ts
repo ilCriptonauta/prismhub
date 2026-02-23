@@ -2,9 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@multiversx/sdk-dapp", "@multiversx/sdk-dapp-ui", "@multiversx/sdk-dapp-utils"],
-  // Silence Turbopack/Webpack conflict warning in Next.js 16
+  // Exclude native addon packages from webpack bundling
+  serverExternalPackages: ["@resvg/resvg-js", "satori"],
 
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
@@ -12,6 +13,12 @@ const nextConfig: NextConfig = {
       os: false,
       buffer: require.resolve('buffer/'),
     };
+
+    // Handle native .node files
+    if (isServer) {
+      config.externals = [...(config.externals || []), '@resvg/resvg-js'];
+    }
+
     return config;
   },
 };
