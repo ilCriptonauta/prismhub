@@ -18,6 +18,7 @@ interface BaseCardProps {
     traits?: Array<{ trait_type: string; value: string }>;
     onArtClick?: () => void;
     isExporting?: boolean;
+    exportCb?: string;
     floorPrice?: number;
 }
 
@@ -33,6 +34,7 @@ export function BaseCard({
     traits = [],
     onArtClick,
     isExporting = false,
+    exportCb,
     floorPrice
 }: BaseCardProps) {
     const { theme, resolvedTheme } = useTheme();
@@ -81,7 +83,7 @@ export function BaseCard({
 
         let finalImage = image;
         if (isExporting && image) {
-            finalImage = `/api/proxy-image?url=${encodeURIComponent(image)}`;
+            finalImage = `/api/proxy-image?url=${encodeURIComponent(image)}${exportCb ? `&cb=${exportCb}` : ''}`;
         }
 
         if (!isExporting) {

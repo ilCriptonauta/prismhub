@@ -25,6 +25,7 @@ export default function CardsGeneratorPage() {
     const [isExporting, setIsExporting] = useState(false);
     const [isSelectionOpen, setIsSelectionOpen] = useState(false);
     const [floorPrice, setFloorPrice] = useState<number>(0);
+    const [exportCb, setExportCb] = useState<string | undefined>(undefined);
     const cardRef = useRef<HTMLDivElement>(null);
 
     // Initial fetch for all votes
@@ -91,15 +92,22 @@ export default function CardsGeneratorPage() {
     const handleDownload = useCallback(async () => {
         if (!cardRef.current || !selectedNft) return;
         setIsDownloading(true);
+
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const timestamp = new Date().getTime().toString();
+
+        // Setting exportCb first ensures the URL we preload is EXACTLY the one the BaseCard will soon use
+        setExportCb(timestamp);
+
+        // Wait a tiny bit for React state to process exportCb
+        await new Promise(resolve => setTimeout(resolve, 50));
+
         setIsExporting(true); // Switch to proxy images for CORS
 
         try {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
             // Force proxy image preload to guarantee it's in browser cache before we screenshot
             // This prevents Safari "empty image" errors while staying within memory limits
             if (selectedNft.url.startsWith('http')) {
-                const timestamp = new Date().getTime();
                 const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(selectedNft.url)}&cb=${timestamp}`;
 
                 await new Promise((resolve) => {
@@ -107,7 +115,7 @@ export default function CardsGeneratorPage() {
                     img.crossOrigin = "anonymous";
                     img.onload = () => {
                         // Small extra delay after load for Safari
-                        setTimeout(resolve, 100);
+                        setTimeout(resolve, 200);
                     };
                     img.onerror = resolve; // Proceed anyway on error
                     img.src = proxyUrl;
@@ -116,7 +124,7 @@ export default function CardsGeneratorPage() {
 
             // Delay to ensure React has fully painted the `isExporting` layout state
             // iOS needs significantly more time to re-render the proxy image onto the canvas
-            await new Promise(resolve => setTimeout(resolve, isIOS ? 800 : 300));
+            await new Promise(resolve => setTimeout(resolve, isIOS ? 1000 : 400));
 
             const dataUrl = await toPng(cardRef.current, {
                 cacheBust: true, // Absolutely essential for Safari iOS to bust tainted CORS cache
@@ -148,6 +156,7 @@ export default function CardsGeneratorPage() {
         } finally {
             setIsDownloading(false);
             setIsExporting(false); // Switch back to original images for display
+            setExportCb(undefined);
         }
     }, [selectedNft]);
 
@@ -237,6 +246,7 @@ export default function CardsGeneratorPage() {
                                                 description={selectedNft?.metadata?.description}
                                                 onArtClick={() => setIsSelectionOpen(true)}
                                                 isExporting={isExporting}
+                                                exportCb={exportCb}
                                                 floorPrice={floorPrice}
                                             />
                                         </div>
