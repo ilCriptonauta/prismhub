@@ -17,7 +17,7 @@
     "@multiversx/sdk-wallet-connect-provider": "^6.1.4",
     "@multiversx/sdk-web-wallet-provider": "^5.1.1",
     "@radix-ui/react-slot": "^1.2.4",
-    "@resvg/resvg-js": "^2.6.2",
+    "@vercel/og": "^0.8.6",
     "buffer": "^6.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

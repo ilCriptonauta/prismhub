@@ -1,17 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
-import satori from 'satori';
-import { Resvg } from '@resvg/resvg-js';
+import { NextRequest } from 'next/server';
+import { ImageResponse } from '@vercel/og';
 import React from 'react';
 
-export const runtime = 'nodejs';
-
-async function loadFont(url: string): Promise<ArrayBuffer> {
-    const res = await fetch(url);
-    return res.arrayBuffer();
-}
+export const runtime = 'edge';
 
 async function fetchImageAsDataUrl(url: string): Promise<string> {
-    const res = await fetch(url, { next: { revalidate: 0 } });
+    const res = await fetch(url);
     if (!res.ok) throw new Error(`Failed to fetch image: ${res.statusText}`);
     const arrayBuffer = await res.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
@@ -44,10 +38,6 @@ export async function GET(request: NextRequest) {
     const rarity = getRarityInfo(level);
     const tierLabel = rarityTrait ? `${rarityTrait} RARITY` : `${rarity.name} TIER`;
     const displayTraits = parsedTraits.slice(0, 4);
-    const gradBg = `linear-gradient(135deg, ${rarity.from}, ${rarity.to})`;
-
-    const WIDTH = 560;
-    const HEIGHT = 980;
 
     let nftImageDataUrl = '';
     if (imageUrl) {
@@ -58,155 +48,154 @@ export async function GET(request: NextRequest) {
         }
     }
 
-    const fontData = await loadFont(
-        'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff'
+    // Load Inter font (700 weight for bold text)
+    const interFontRes = await fetch(
+        'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hiJ-Ek-_EeA.woff'
     );
+    const interFont = await interFontRes.arrayBuffer();
 
-    const el = React.createElement(
-        'div',
-        {
+    const WIDTH = 560;
+    const HEIGHT = 980;
+
+    return new ImageResponse(
+        React.createElement('div', {
             style: {
                 width: WIDTH, height: HEIGHT,
                 backgroundColor: '#0F172A',
                 borderRadius: 40,
                 display: 'flex', flexDirection: 'column',
-                fontFamily: 'Inter',
+                fontFamily: '"Inter"',
                 overflow: 'hidden',
-                border: '2px solid rgba(255,255,255,0.1)',
+                border: '2px solid rgba(255,255,255,0.12)',
             },
         },
-        // Header
-        React.createElement('div', {
-            style: { padding: '32px 32px 0 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }
-        },
+            // Header
             React.createElement('div', {
-                style: { fontSize: 26, fontWeight: 900, color: 'white', letterSpacing: '-0.5px', textTransform: 'uppercase', maxWidth: 280 }
-            }, title),
-            React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 6 } },
-                React.createElement('span', { style: { fontSize: 10, fontWeight: 900, color: 'rgba(255,255,255,0.4)', letterSpacing: 3, textTransform: 'uppercase' } }, 'LVL'),
-                React.createElement('span', { style: { fontSize: 30, fontWeight: 900, color: 'white' } }, String(level)),
-            )
-        ),
-        // Separator
-        React.createElement('div', { style: { margin: '12px 32px', height: 1, background: 'rgba(255,255,255,0.1)' } }),
-        // Image area (wrapper for relative positioning)
-        React.createElement('div', { style: { padding: '0 32px', display: 'flex', position: 'relative' } },
-            // Image box
-            React.createElement('div', {
-                style: {
-                    width: '100%', height: 496,
-                    background: '#1e293b',
-                    borderRadius: 28,
-                    overflow: 'hidden',
-                    border: '4px solid #334155',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }
+                style: { padding: '32px 32px 0 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }
             },
-                nftImageDataUrl
-                    ? React.createElement('img', { src: nftImageDataUrl, style: { width: '100%', height: '100%', objectFit: 'cover' } })
-                    : React.createElement('div', { style: { color: 'rgba(255,255,255,0.3)', fontSize: 40 } }, '◆')
-            ),
-            // XP Badge
-            React.createElement('div', {
-                style: {
-                    position: 'absolute', bottom: -14, right: 18,
-                    background: gradBg,
-                    borderRadius: 14, padding: '6px 14px',
-                    display: 'flex', alignItems: 'center', gap: 6,
-                }
-            },
-                React.createElement('span', {
-                    style: { fontSize: 12, fontWeight: 900, color: 'white', fontStyle: 'italic' }
-                }, `✦ ${xp} XP`)
-            )
-        ),
-        // Traits header
-        React.createElement('div', {
-            style: {
-                margin: '28px 32px 10px 32px', display: 'flex',
-                justifyContent: 'space-between', alignItems: 'center',
-                borderTop: '1px solid rgba(255,255,255,0.07)',
-                borderBottom: '1px solid rgba(255,255,255,0.07)',
-                padding: '7px 0',
-            }
-        },
-            React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 8 } },
-                React.createElement('div', { style: { width: 7, height: 7, borderRadius: '50%', background: rarity.from } }),
-                React.createElement('span', { style: { fontSize: 10, fontWeight: 900, color: 'rgba(255,255,255,0.4)', letterSpacing: 3, textTransform: 'uppercase' } }, 'CARD INFO'),
-            ),
-            React.createElement('span', { style: { fontSize: 10, fontWeight: 900, color: 'rgba(255,255,255,0.4)', letterSpacing: 2, textTransform: 'uppercase' } }, tierLabel),
-        ),
-        // Traits grid
-        React.createElement('div', {
-            style: { padding: '0 32px', display: 'flex', flexWrap: 'wrap', gap: 8, flex: 1 }
-        },
-            ...displayTraits.map((t) =>
                 React.createElement('div', {
-                    key: t.trait_type,
+                    style: { fontSize: 24, fontWeight: 700, color: 'white', letterSpacing: '-0.5px', textTransform: 'uppercase', maxWidth: 280, lineHeight: 1.1 }
+                }, title),
+                React.createElement('div', { style: { display: 'flex', alignItems: 'baseline', gap: 4 } },
+                    React.createElement('span', { style: { fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.4)', letterSpacing: 3, textTransform: 'uppercase' } }, 'LVL'),
+                    React.createElement('span', { style: { fontSize: 30, fontWeight: 700, color: 'white' } }, String(level)),
+                )
+            ),
+            // Separator
+            React.createElement('div', { style: { margin: '14px 32px', height: 1, background: 'rgba(255,255,255,0.1)', display: 'flex' } }),
+            // Image box
+            React.createElement('div', { style: { padding: '0 32px', display: 'flex' } },
+                React.createElement('div', {
                     style: {
-                        background: 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        borderRadius: 10, padding: '6px 12px',
-                        display: 'flex', flexDirection: 'column',
-                        minWidth: 110, flex: 1,
+                        width: '100%', height: 490,
+                        background: '#1e293b',
+                        borderRadius: 28,
+                        overflow: 'hidden',
+                        border: '4px solid #334155',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'relative',
                     }
                 },
-                    React.createElement('span', { style: { fontSize: 7, fontWeight: 900, color: 'rgba(255,255,255,0.35)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 2 } }, t.trait_type || 'Attribute'),
-                    React.createElement('span', { style: { fontSize: 10, fontWeight: 700, color: 'white', textTransform: 'uppercase' } }, t.value || 'Unknown'),
-                )
-            )
-        ),
-        // Progress bar
-        React.createElement('div', { style: { padding: '16px 32px 8px 32px', display: 'flex' } },
-            React.createElement('div', {
-                style: { width: '100%', height: 6, background: '#1e293b', borderRadius: 99, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', display: 'flex' }
-            },
+                    nftImageDataUrl
+                        ? React.createElement('img', { src: nftImageDataUrl, style: { width: '100%', height: '100%', objectFit: 'cover' } })
+                        : React.createElement('div', { style: { color: 'rgba(255,255,255,0.3)', fontSize: 40, display: 'flex' } }, '◆')
+                ),
+            ),
+            // XP Badge (placed after image, overlapping via negative margin trick)
+            React.createElement('div', { style: { display: 'flex', justifyContent: 'flex-end', paddingRight: 48, marginTop: -18 } },
                 React.createElement('div', {
-                    style: { width: `${progress}%`, height: '100%', background: `linear-gradient(90deg, ${rarity.from}, ${rarity.to})`, borderRadius: 99 }
-                })
-            )
-        ),
-        // Footer
-        React.createElement('div', {
-            style: { padding: '8px 32px 32px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }
-        },
-            React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 10 } },
-                React.createElement('div', {
-                    style: { width: 32, height: 32, borderRadius: 10, background: gradBg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }
-                }, '✦'),
-                React.createElement('div', { style: { display: 'flex', flexDirection: 'column' } },
-                    React.createElement('span', { style: { fontSize: 11, fontWeight: 900, color: 'white', letterSpacing: 2, textTransform: 'uppercase' } }, 'OOX HUB'),
-                    React.createElement('span', { style: { fontSize: 7, fontWeight: 700, color: 'rgba(255,255,255,0.35)', letterSpacing: 1, textTransform: 'uppercase' } }, 'Genesis Protocol'),
+                    style: {
+                        background: `linear-gradient(135deg, ${rarity.from}, ${rarity.to})`,
+                        borderRadius: 14, padding: '6px 16px',
+                        display: 'flex', alignItems: 'center',
+                    }
+                },
+                    React.createElement('span', {
+                        style: { fontSize: 12, fontWeight: 700, color: 'white', fontStyle: 'italic' }
+                    }, `✦ ${xp} XP`)
                 )
             ),
-            React.createElement('div', { style: { display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 } },
-                React.createElement('span', {
-                    style: { fontSize: 8, fontWeight: 900, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1.5 }
-                }, floorPrice > 0 ? `FLOOR: ${floorPrice.toFixed(2)} EGLD` : 'SECURED'),
-                React.createElement('span', {
-                    style: { fontSize: 6, fontWeight: 700, color: 'rgba(255,255,255,0.2)', letterSpacing: 2, textTransform: 'uppercase' }
-                }, '© 2026 MULTIVERSX NETWORK'),
+            // Traits header
+            React.createElement('div', {
+                style: {
+                    margin: '14px 32px 10px 32px', display: 'flex',
+                    justifyContent: 'space-between', alignItems: 'center',
+                    borderTop: '1px solid rgba(255,255,255,0.07)',
+                    borderBottom: '1px solid rgba(255,255,255,0.07)',
+                    padding: '7px 0',
+                }
+            },
+                React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 8 } },
+                    React.createElement('div', { style: { width: 7, height: 7, borderRadius: 4, background: rarity.from, display: 'flex' } }),
+                    React.createElement('span', { style: { fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.4)', letterSpacing: 3, textTransform: 'uppercase' } }, 'CARD INFO'),
+                ),
+                React.createElement('span', { style: { fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.4)', letterSpacing: 2, textTransform: 'uppercase' } }, tierLabel),
+            ),
+            // Traits grid
+            React.createElement('div', {
+                style: { padding: '0 32px', display: 'flex', flexWrap: 'wrap', gap: 8, flex: 1 }
+            },
+                ...displayTraits.map((t, i) =>
+                    React.createElement('div', {
+                        key: i,
+                        style: {
+                            background: 'rgba(255,255,255,0.05)',
+                            border: '1px solid rgba(255,255,255,0.1)',
+                            borderRadius: 10, padding: '6px 12px',
+                            display: 'flex', flexDirection: 'column',
+                            minWidth: 110, flex: 1,
+                        }
+                    },
+                        React.createElement('span', { style: { fontSize: 7, fontWeight: 700, color: 'rgba(255,255,255,0.35)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 2 } }, t.trait_type || 'Attribute'),
+                        React.createElement('span', { style: { fontSize: 10, fontWeight: 700, color: 'white', textTransform: 'uppercase' } }, t.value || 'Unknown'),
+                    )
+                )
+            ),
+            // Progress bar
+            React.createElement('div', { style: { padding: '14px 32px 6px 32px', display: 'flex' } },
+                React.createElement('div', {
+                    style: { width: '100%', height: 6, background: '#1e293b', borderRadius: 99, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', display: 'flex' }
+                },
+                    React.createElement('div', {
+                        style: { width: `${progress}%`, height: '100%', background: `linear-gradient(90deg, ${rarity.from}, ${rarity.to})`, borderRadius: 99, display: 'flex' }
+                    })
+                )
+            ),
+            // Footer
+            React.createElement('div', {
+                style: { padding: '8px 32px 30px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }
+            },
+                React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 10 } },
+                    React.createElement('div', {
+                        style: { width: 32, height: 32, borderRadius: 10, background: `linear-gradient(135deg, ${rarity.from}, ${rarity.to})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }
+                    }, '✦'),
+                    React.createElement('div', { style: { display: 'flex', flexDirection: 'column' } },
+                        React.createElement('span', { style: { fontSize: 11, fontWeight: 700, color: 'white', letterSpacing: 2, textTransform: 'uppercase' } }, 'OOX HUB'),
+                        React.createElement('span', { style: { fontSize: 7, fontWeight: 700, color: 'rgba(255,255,255,0.35)', letterSpacing: 1, textTransform: 'uppercase' } }, 'Genesis Protocol'),
+                    )
+                ),
+                React.createElement('div', { style: { display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 } },
+                    React.createElement('span', {
+                        style: { fontSize: 8, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1.5 }
+                    }, floorPrice > 0 ? `FLOOR: ${floorPrice.toFixed(2)} EGLD` : 'SECURED'),
+                    React.createElement('span', {
+                        style: { fontSize: 6, fontWeight: 700, color: 'rgba(255,255,255,0.2)', letterSpacing: 2, textTransform: 'uppercase' }
+                    }, '© 2026 MULTIVERSX NETWORK'),
+                )
             )
-        )
+        ),
+        {
+            width: WIDTH,
+            height: HEIGHT,
+            headers: {
+                'Content-Disposition': 'attachment; filename="oox-card.png"',
+                'Cache-Control': 'no-store',
+            },
+            fonts: [
+                { name: 'Inter', data: interFont, weight: 700, style: 'normal' },
+            ],
+        }
     );
-
-    const svg = await satori(el, {
-        width: WIDTH,
-        height: HEIGHT,
-        fonts: [{ name: 'Inter', data: fontData, weight: 400, style: 'normal' }],
-    });
-
-    const resvg = new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH * 2 } });
-    const pngBuffer = resvg.render().asPng();
-
-    return new NextResponse(Buffer.from(pngBuffer), {
-        status: 200,
-        headers: {
-            'Content-Type': 'image/png',
-            'Content-Disposition': 'attachment; filename="oox-card.png"',
-            'Cache-Control': 'no-store',
-        },
-    });
 }
