@@ -30,7 +30,8 @@ export default function CardsGeneratorPage() {
     // Initial fetch for all votes
     useEffect(() => {
         const fetchVotes = async () => {
-            const votes = await getAllVotes();
+            const result = await getAllVotes();
+            const votes = result.nfts;
             setAllVotes(prev => {
                 // Merge votes but keep any optimistically higher values
                 // This prevents the score from "blinking" down to 0 if the API hasn't indexed a newly cast vote yet.

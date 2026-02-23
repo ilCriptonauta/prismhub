@@ -8,7 +8,7 @@ import { Card, CardDecoration } from "@/components/modern-ui/card";
 import { Footer } from "@/components/Footer";
 import { PROJECTS_DATA, Project } from "@/data/projects";
 import { useEffect, useState, useMemo } from "react";
-import { getAllVotes } from "@/lib/mx-votes";
+import { getAllVotes, VotesResult } from "@/lib/mx-votes";
 import { STREAK_RANKING_DATA } from "@/data/streaks";
 
 // Types for ranking
@@ -18,7 +18,7 @@ interface RankedProject extends Project {
 }
 
 export default function RankingPage() {
-    const [votesData, setVotesData] = useState<Record<string, number>>({});
+    const [votesData, setVotesData] = useState<VotesResult | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -40,18 +40,20 @@ export default function RankingPage() {
     }, []);
 
     const topProjects = useMemo(() => {
+        if (!votesData) return [];
         return PROJECTS_DATA
             .filter(p => p.category === "NFTS Project")
-            .map(p => ({ ...p, votes: votesData[p.id] || 0 }))
+            .map(p => ({ ...p, votes: votesData.projects[p.id] || 0 }))
             .sort((a, b) => b.votes - a.votes)
             .slice(0, 3)
             .map((p, i) => ({ ...p, rank: i + 1 }));
     }, [votesData]);
 
     const topArtists = useMemo(() => {
+        if (!votesData) return [];
         return PROJECTS_DATA
             .filter(p => p.category === "Artists")
-            .map(p => ({ ...p, votes: votesData[p.id] || 0 }))
+            .map(p => ({ ...p, votes: votesData.projects[p.id] || 0 }))
             .sort((a, b) => b.votes - a.votes)
             .slice(0, 3)
             .map((p, i) => ({ ...p, rank: i + 1 }));
