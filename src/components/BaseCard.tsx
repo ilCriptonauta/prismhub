@@ -91,7 +91,7 @@ export function BaseCard({
         }
 
         setCurrentImage(finalImage);
-    }, [image, isExporting]);
+    }, [image, isExporting, exportCb]);
 
     React.useEffect(() => {
         setMounted(true);
@@ -113,7 +113,7 @@ export function BaseCard({
             id={id}
             initial="initial"
             whileHover="hover"
-            className={`relative w-full aspect-[1/1.75] ${cardBg} border-2 ${borderColor} rounded-[40px] overflow-hidden shadow-2xl flex flex-col group transition-all duration-700 ${rarity.glow}`}
+            className={`relative w-full aspect-[1/1.75] ${cardBg} border-2 ${borderColor} rounded-[40px] overflow-hidden shadow-2xl flex flex-col group ${isExporting ? '' : 'transition-all duration-700'} ${rarity.glow}`}
             style={{
                 transform: "translateZ(0)",
                 backfaceVisibility: "hidden"
@@ -167,7 +167,7 @@ export function BaseCard({
                         className={`relative w-full aspect-square z-30 transition-all duration-500 mb-6 ${onArtClick ? 'cursor-pointer hover:scale-[1.01]' : ''}`}
                     >
                         <div className="absolute -inset-1 bg-gradient-to-br from-white/10 to-transparent rounded-[32px] blur-sm" />
-                        <div className={`w-full h-full ${isDarkMode ? 'bg-slate-100' : 'bg-slate-900'} border-4 ${isDarkMode ? 'border-white' : 'border-slate-800'} rounded-[32px] overflow-hidden shadow-2xl relative flex items-center justify-center transition-all ${onArtClick ? 'hover:border-primary/50' : ''}`}>
+                        <div className={`w-full h-full ${isDarkMode ? 'bg-slate-100' : 'bg-slate-900'} border-4 ${isDarkMode ? 'border-white' : 'border-slate-800'} rounded-[32px] overflow-hidden shadow-2xl relative flex items-center justify-center ${isExporting ? '' : 'transition-all'} ${onArtClick ? 'hover:border-primary/50' : ''}`}>
                             {currentImage && !imgError ? (
                                 <>
                                     {imgLoading && !isExporting && (

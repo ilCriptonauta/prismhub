@@ -120,15 +120,38 @@ export default function CardsGeneratorPage() {
             }
 
             // 2. Wait for React to render the Base64 image and UI state
-            await new Promise(resolve => setTimeout(resolve, isIOS ? 1500 : 500));
+            await new Promise(resolve => setTimeout(resolve, isIOS ? 1000 : 300));
 
-            // 3. CAPTURE using html-to-image (Supports oklab colors)
-            const dataUrl = await toPng(cardRef.current, {
-                cacheBust: true,
-                pixelRatio: 2,
+            // 3. SECURE RENDER: Ensure the image is DECODED in the browser's GPU buffer
+            if (cardRef.current) {
+                const img = cardRef.current.querySelector('img[alt="nft"]') as HTMLImageElement;
+                if (img) {
+                    try {
+                        // This forces the browser to actually decode the Base64 bytes into pixels
+                        if (img.decode) {
+                            await img.decode();
+                        }
+                        // Secondary check: verify image has dimensions
+                        if (img.naturalWidth === 0) {
+                            console.warn("Image naturalWidth is 0, waiting extra...");
+                            await new Promise(r => setTimeout(r, 1000));
+                        }
+                    } catch (e) {
+                        console.error("Decode failed, proceeding anyway", e);
+                    }
+                }
+            }
+
+            // 4. CAPTURE using html-to-image to CANVAS first (more stable on iOS)
+            const options = {
+                pixelRatio: isIOS ? 1.5 : 2, // Scale down slightly for iOS memory limits
+                skipAutoScale: true,
+                cacheBust: false,
                 backgroundColor: "transparent",
                 style: {
                     transform: "none",
+                    transition: "none",
+                    animation: "none",
                 },
                 filter: (node: any) => {
                     const exclusionClasses = ['blur-3xl', 'animate-pulse', 'animate-spin'];
@@ -137,7 +160,9 @@ export default function CardsGeneratorPage() {
                     }
                     return true;
                 }
-            });
+            };
+
+            const dataUrl = await toPng(cardRef.current, options);
 
             // 4. Handle the download with iOS specific persistence
             if (isIOS) {
