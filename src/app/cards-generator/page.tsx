@@ -26,6 +26,7 @@ export default function CardsGeneratorPage() {
     const [isSelectionOpen, setIsSelectionOpen] = useState(false);
     const [floorPrice, setFloorPrice] = useState<number>(0);
     const [exportCb, setExportCb] = useState<string | undefined>(undefined);
+    const [base64Image, setBase64Image] = useState<string | null>(null);
     const cardRef = useRef<HTMLDivElement>(null);
 
     // Initial fetch for all votes
@@ -105,30 +106,35 @@ export default function CardsGeneratorPage() {
         setIsExporting(true); // Switch to proxy images for CORS
 
         try {
-            // Force proxy image preload to guarantee it's in browser cache before we screenshot
-            // This prevents Safari "empty image" errors while staying within memory limits
+            const fileName = `oox-card-${selectedNft?.name.replace(/\s+/g, '-').toLowerCase() || "creative"}.png`;
+
+            // THE SECRET SAUCE: Fetch the image and convert to Base64 BEFORE capturing
+            // This makes the image "local" to the browser, bypassing ALL CORS/Safari Tainted Canvas logic
             if (selectedNft.url.startsWith('http')) {
                 const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(selectedNft.url)}&cb=${timestamp}`;
+                const response = await fetch(proxyUrl);
+                if (!response.ok) throw new Error("Failed to fetch image via proxy");
 
-                await new Promise((resolve) => {
-                    const img = new Image();
-                    img.crossOrigin = "anonymous";
-                    img.onload = () => {
-                        // Small extra delay after load for Safari
-                        setTimeout(resolve, 200);
-                    };
-                    img.onerror = resolve; // Proceed anyway on error
-                    img.src = proxyUrl;
+                const blob = await response.blob();
+                const reader = new FileReader();
+                const b64Promise = new Promise<string>((resolve, reject) => {
+                    reader.onloadend = () => resolve(reader.result as string);
+                    reader.onerror = reject;
                 });
+                reader.readAsDataURL(blob);
+                const b64 = await b64Promise;
+                setBase64Image(b64);
             }
 
-            // Delay to ensure React has fully painted the `isExporting` layout state
-            // iOS needs significantly more time to re-render the proxy image onto the canvas
-            await new Promise(resolve => setTimeout(resolve, isIOS ? 1000 : 400));
+            // Sync states for export mode
+            setIsExporting(true);
+
+            // Longer wait for iOS to ensure the base64 image is painted
+            await new Promise(resolve => setTimeout(resolve, isIOS ? 1200 : 400));
 
             const dataUrl = await toPng(cardRef.current, {
-                cacheBust: true, // Absolutely essential for Safari iOS to bust tainted CORS cache
-                pixelRatio: 2, // Retina quality (x2). Max safe ratio for massive canvases on iOS Safari
+                cacheBust: true,
+                pixelRatio: 2,
                 backgroundColor: "transparent",
                 style: {
                     transform: "none",
@@ -142,13 +148,33 @@ export default function CardsGeneratorPage() {
                 }
             });
 
-            // On iOS, direct link click might fail to save, so we provide the data URL
-            const link = document.createElement("a");
-            link.download = `oox-card-${selectedNft?.name.replace(/\s+/g, '-').toLowerCase() || "creative"}.png`;
-            link.href = dataUrl;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // Handle the download
+            if (isIOS) {
+                // On iOS Safari, we try the Share API first, then fallback to current tab preview
+                if (navigator.share) {
+                    try {
+                        const blob = await (await fetch(dataUrl)).blob();
+                        const file = new File([blob], fileName, { type: 'image/png' });
+                        await navigator.share({
+                            files: [file],
+                            title: 'OOX Hub Card',
+                        });
+                    } catch (shareErr) {
+                        // If sharing is cancelled, we do nothing to stay on page
+                        console.log("Share cancelled or failed", shareErr);
+                        window.open(dataUrl, '_blank');
+                    }
+                } else {
+                    window.open(dataUrl, '_blank');
+                }
+            } else {
+                const link = document.createElement("a");
+                link.download = fileName;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         } catch (err: any) {
             console.error("Failed to download card:", err);
             const errorMsg = err instanceof Error ? err.message : String(err);
@@ -240,7 +266,7 @@ export default function CardsGeneratorPage() {
                                             <BaseCard
                                                 title={selectedNft?.name || "SELECT YOUR NFT"}
                                                 nftNumber={selectedNft ? `#${selectedNft.identifier.split('-').pop()}` : "#0000"}
-                                                image={selectedNft?.url}
+                                                image={base64Image || selectedNft?.url}
                                                 votes={selectedNft ? (allVotes[selectedNft.identifier] || 0) : 0}
                                                 traits={(selectedNft?.metadata?.attributes || (selectedNft?.attributes as any)) || []}
                                                 description={selectedNft?.metadata?.description}
