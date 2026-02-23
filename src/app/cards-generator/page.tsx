@@ -145,27 +145,30 @@ export default function CardsGeneratorPage() {
                 // direct "link.click()" is often ignored by Chrome/Safari for dataUrls
                 if (navigator.share) {
                     try {
-                        const blob = await (await fetch(dataUrl)).blob();
+                        // Fetch blob directly to ensure share sheet handles the file instead of a long data URL
+                        const res = await fetch(dataUrl);
+                        const blob = await res.blob();
                         const file = new File([blob], fileName, { type: 'image/png' });
                         await navigator.share({
                             files: [file],
                             title: 'OOX Hub Card',
-                            text: 'Check out my OOX Hub Card!'
+                            text: 'My MultiversX NFT Card from OOX Hub'
                         });
                     } catch (shareErr) {
-                        // Fallback: View in new tab for long-press save
-                        const newTab = window.open();
-                        if (newTab) {
-                            newTab.document.write(`<img src="${dataUrl}" style="width:100%; border-radius: 12px;" />`);
-                            newTab.document.title = "Save Image";
+                        try {
+                            const link = document.createElement("a");
+                            link.download = fileName;
+                            link.href = dataUrl;
+                            link.click();
+                        } catch (e) {
+                            window.location.href = dataUrl;
                         }
                     }
                 } else {
-                    const newTab = window.open();
-                    if (newTab) {
-                        newTab.document.write(`<img src="${dataUrl}" style="width:100%; border-radius: 12px;" />`);
-                        newTab.document.title = "Save Image";
-                    }
+                    const link = document.createElement("a");
+                    link.download = fileName;
+                    link.href = dataUrl;
+                    link.click();
                 }
             } else {
                 const link = document.createElement("a");
