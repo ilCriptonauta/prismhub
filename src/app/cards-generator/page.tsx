@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useGetIsLoggedIn } from "@multiversx/sdk-dapp/out/react/account/useGetIsLoggedIn";
 import { useUserNFTs, NFT } from "@/hooks/useUserNFTs";
 import { getAllVotes, getSingleNftVotes, getCollectionFloorPrice } from "@/lib/mx-votes";
-import html2canvas from 'html2canvas';
+import { generateCanvasCard } from "@/lib/canvas-card-generator";
 import { UnlockPanelManager } from "@multiversx/sdk-dapp/out/managers/UnlockPanelManager/UnlockPanelManager";
 
 export default function CardsGeneratorPage() {
@@ -104,13 +104,14 @@ export default function CardsGeneratorPage() {
             setIsExporting(true);
             setExportCb(timestamp);
 
+            let b64 = null;
             if (selectedNft.url.startsWith('http')) {
                 const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(selectedNft.url)}&cb=${timestamp}`;
                 const response = await fetch(proxyUrl);
                 if (!response.ok) throw new Error("Failed to fetch image via proxy");
 
                 const blob = await response.blob();
-                const b64 = await new Promise<string>((resolve, reject) => {
+                b64 = await new Promise<string>((resolve, reject) => {
                     const reader = new FileReader();
                     reader.onloadend = () => resolve(reader.result as string);
                     reader.onerror = reject;
@@ -119,24 +120,40 @@ export default function CardsGeneratorPage() {
                 setBase64Image(b64);
             }
 
-            // 2. Wait for React to render the Base64 image and UI state
-            await new Promise(resolve => setTimeout(resolve, isIOS ? 1500 : 500));
+            // 2. We no longer wait for the visual UI to render or use html2canvas because it breaks on iOS WebKit!
+            // Instead, we compute the game logic values here and render a native pristine 2D canvas.
 
-            // 3. CAPTURE using html2canvas (Better iOS Support)
-            const canvas = await html2canvas(cardRef.current, {
-                scale: 2, // Retina scale
-                useCORS: true, // Allow external images
-                allowTaint: true, // Allow tainted canvas if CORS fails, might let iOS save a local version
-                backgroundColor: null, // Transparent background
-                ignoreElements: (element) => {
-                    const exclusionClasses = ['blur-3xl', 'animate-pulse', 'animate-spin'];
-                    if (element.classList) {
-                        return exclusionClasses.some(cls => element.classList.contains(cls));
-                    }
-                    return false;
-                }
+            const xp = (allVotes[selectedNft.identifier] || 0) * 10;
+            const level = Math.floor(xp / 250);
+            const progressToNextLevel = ((xp % 250) / 250) * 100;
+
+            const getRarityInfoBase = (lvl: number) => {
+                if (lvl >= 10) return { name: "LEGENDARY", colorFrom: "#f97316", colorTo: "#eab308" }; // orange-500 to yellow-500
+                if (lvl >= 5) return { name: "EPIC", colorFrom: "#a855f7", colorTo: "#ec4899" }; // purple-500 to pink-500
+                if (lvl >= 2) return { name: "RARE", colorFrom: "#3b82f6", colorTo: "#06b6d4" }; // blue-500 to cyan-500
+                return { name: "COMMON", colorFrom: "#60a5fa", colorTo: "#a78bfa" }; // blue-400 to purple-400
+            };
+
+            const rarity = getRarityInfoBase(level);
+            let parsedTraits: { trait_type: string, value: string }[] = [];
+            const rawTraits = selectedNft.metadata?.attributes || (selectedNft as any).attributes || [];
+            if (Array.isArray(rawTraits)) {
+                parsedTraits = rawTraits;
+            } else if (typeof rawTraits === 'string') {
+                try { parsedTraits = JSON.parse(rawTraits); } catch (e) { }
+            }
+
+            // 3. CAPTURE using our Native HTML5 Canvas 2D Engine (100% iOS compliant)
+            const dataUrl = await generateCanvasCard({
+                title: selectedNft.name || 'OOX CREATIVE',
+                level,
+                xp,
+                progressToNextLevel,
+                rarity,
+                traits: parsedTraits,
+                base64Image: b64,
+                floorPrice: floorPrice
             });
-            const dataUrl = canvas.toDataURL('image/png', 1.0);
 
             // 4. Handle the download with iOS specific persistence
             if (isIOS) {
