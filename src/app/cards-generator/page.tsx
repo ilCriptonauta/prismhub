@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useGetIsLoggedIn } from "@multiversx/sdk-dapp/out/react/account/useGetIsLoggedIn";
 import { useUserNFTs, NFT } from "@/hooks/useUserNFTs";
 import { getAllVotes, getSingleNftVotes, getCollectionFloorPrice } from "@/lib/mx-votes";
-import { toPng } from "html-to-image";
+import html2canvas from 'html2canvas';
 import { UnlockPanelManager } from "@multiversx/sdk-dapp/out/managers/UnlockPanelManager/UnlockPanelManager";
 
 export default function CardsGeneratorPage() {
@@ -122,22 +122,21 @@ export default function CardsGeneratorPage() {
             // 2. Wait for React to render the Base64 image and UI state
             await new Promise(resolve => setTimeout(resolve, isIOS ? 1500 : 500));
 
-            // 3. CAPTURE using html-to-image (Supports oklab colors)
-            const dataUrl = await toPng(cardRef.current, {
-                cacheBust: true,
-                pixelRatio: 2,
-                backgroundColor: "transparent",
-                style: {
-                    transform: "none",
-                },
-                filter: (node: any) => {
+            // 3. CAPTURE using html2canvas (Better iOS Support)
+            const canvas = await html2canvas(cardRef.current, {
+                scale: 2, // Retina scale
+                useCORS: true, // Allow external images
+                allowTaint: true, // Allow tainted canvas if CORS fails, might let iOS save a local version
+                backgroundColor: null, // Transparent background
+                ignoreElements: (element) => {
                     const exclusionClasses = ['blur-3xl', 'animate-pulse', 'animate-spin'];
-                    if (node.classList) {
-                        return !exclusionClasses.some(cls => node.classList.contains(cls));
+                    if (element.classList) {
+                        return exclusionClasses.some(cls => element.classList.contains(cls));
                     }
-                    return true;
+                    return false;
                 }
             });
+            const dataUrl = canvas.toDataURL('image/png', 1.0);
 
             // 4. Handle the download with iOS specific persistence
             if (isIOS) {
