@@ -94,21 +94,29 @@ export default function CardsGeneratorPage() {
         setIsExporting(true); // Switch to proxy images for CORS
 
         try {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
             // Force proxy image preload to guarantee it's in browser cache before we screenshot
             // This prevents Safari "empty image" errors while staying within memory limits
             if (selectedNft.url.startsWith('http')) {
-                const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(selectedNft.url)}`;
+                const timestamp = new Date().getTime();
+                const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(selectedNft.url)}&cb=${timestamp}`;
+
                 await new Promise((resolve) => {
                     const img = new Image();
                     img.crossOrigin = "anonymous";
-                    img.onload = resolve;
+                    img.onload = () => {
+                        // Small extra delay after load for Safari
+                        setTimeout(resolve, 100);
+                    };
                     img.onerror = resolve; // Proceed anyway on error
                     img.src = proxyUrl;
                 });
             }
 
             // Delay to ensure React has fully painted the `isExporting` layout state
-            await new Promise(resolve => setTimeout(resolve, 250));
+            // iOS needs significantly more time to re-render the proxy image onto the canvas
+            await new Promise(resolve => setTimeout(resolve, isIOS ? 800 : 300));
 
             const dataUrl = await toPng(cardRef.current, {
                 cacheBust: true, // Absolutely essential for Safari iOS to bust tainted CORS cache
@@ -125,10 +133,14 @@ export default function CardsGeneratorPage() {
                     return true;
                 }
             });
+
+            // On iOS, direct link click might fail to save, so we provide the data URL
             const link = document.createElement("a");
             link.download = `oox-card-${selectedNft?.name.replace(/\s+/g, '-').toLowerCase() || "creative"}.png`;
             link.href = dataUrl;
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
         } catch (err: any) {
             console.error("Failed to download card:", err);
             const errorMsg = err instanceof Error ? err.message : String(err);
