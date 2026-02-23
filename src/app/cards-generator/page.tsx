@@ -14,9 +14,12 @@ import { useUserNFTs, NFT } from "@/hooks/useUserNFTs";
 import { getAllVotes, getSingleNftVotes, getCollectionFloorPrice } from "@/lib/mx-votes";
 import { generateCanvasCard } from "@/lib/canvas-card-generator";
 import { UnlockPanelManager } from "@multiversx/sdk-dapp/out/managers/UnlockPanelManager/UnlockPanelManager";
+import { useTheme } from "next-themes";
 
 export default function CardsGeneratorPage() {
     const isLoggedIn = useGetIsLoggedIn();
+    const { resolvedTheme } = useTheme();
+    const isDarkMode = resolvedTheme === 'dark';
     const { nfts, isLoading: isLoadingNfts } = useUserNFTs();
     const [selectedNft, setSelectedNft] = useState<NFT | null>(null);
     const [allVotes, setAllVotes] = useState<Record<string, number>>({});
@@ -152,7 +155,8 @@ export default function CardsGeneratorPage() {
                 rarity,
                 traits: parsedTraits,
                 base64Image: b64,
-                floorPrice: floorPrice
+                floorPrice: floorPrice,
+                isDarkMode: isDarkMode
             });
 
             // 4. Handle the download with iOS specific persistence
