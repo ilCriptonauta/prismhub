@@ -94,21 +94,24 @@ export async function generateCanvasCard(params: {
 
     // --- 2. Header ---
     ctx.fillStyle = c.textPrimary;
-    ctx.font = '900 24px Inter, sans-serif';
+    ctx.font = '900 24px "Google Sans Flex", sans-serif';
     ctx.textBaseline = 'top';
     const displayTitle = title.toUpperCase();
     ctx.fillText(displayTitle, 32, 32);
 
-    ctx.fillStyle = c.textTert;
-    ctx.font = '900 10px Inter, sans-serif';
-    ctx.letterSpacing = '3px';
-    ctx.fillText('LEVEL', 480, 42);
-    ctx.letterSpacing = '0px';
-
     ctx.fillStyle = c.textPrimary;
     ctx.textAlign = 'right';
-    ctx.font = '900 30px Inter, sans-serif';
-    ctx.fillText(String(level), 530, 32);
+    ctx.font = '900 30px "Google Sans Flex", sans-serif';
+    const levelStr = String(level);
+    ctx.fillText(levelStr, 530, 32);
+
+    const levelWidth = ctx.measureText(levelStr).width;
+
+    ctx.fillStyle = c.textTert;
+    ctx.font = '900 10px "Google Sans Flex", sans-serif';
+    ctx.letterSpacing = '3px';
+    ctx.fillText('LEVEL', 530 - levelWidth - 8, 42); // 8px gap
+    ctx.letterSpacing = '0px';
     ctx.textAlign = 'left';
 
     // Separator
@@ -156,7 +159,7 @@ export async function generateCanvasCard(params: {
         }
     } else {
         ctx.fillStyle = c.textTert;
-        ctx.font = '900 50px Inter';
+        ctx.font = '900 50px "Google Sans Flex", sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('◆', imgX + imgW / 2, imgY + imgH / 2 - 25);
         ctx.textAlign = 'left';
@@ -173,7 +176,7 @@ export async function generateCanvasCard(params: {
 
     // Text on badge is always white regardless of theme because badge is colored
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'italic 900 12px Inter, sans-serif';
+    ctx.font = 'italic 900 12px "Google Sans Flex", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(`✦ ${Math.floor(xp)} XP`, badgeX + badgeW / 2, badgeY + 8);
     ctx.textAlign = 'left';
@@ -192,7 +195,7 @@ export async function generateCanvasCard(params: {
     ctx.fill();
 
     ctx.fillStyle = c.textTert;
-    ctx.font = '900 10px Inter, sans-serif';
+    ctx.font = '900 10px "Google Sans Flex", sans-serif';
     ctx.letterSpacing = '3px';
     ctx.fillText('CARD INFO', 46, traitsHeaderY + 13);
 
@@ -223,14 +226,14 @@ export async function generateCanvasCard(params: {
 
         // Trait Type
         ctx.fillStyle = c.textTert;
-        ctx.font = '900 7px Inter, sans-serif';
+        ctx.font = '900 7px "Google Sans Flex", sans-serif';
         ctx.letterSpacing = '2px';
         ctx.fillText((t.trait_type || 'Attribute').toUpperCase(), startX + 12, startY + 8);
         ctx.letterSpacing = '0px';
 
         // Trait Value
         ctx.fillStyle = c.textPrimary;
-        ctx.font = 'bold 10px Inter, sans-serif';
+        ctx.font = 'bold 10px "Google Sans Flex", sans-serif';
         let valTitle = (t.value || 'Unknown').toString().toUpperCase();
         if (valTitle.length > 15) valTitle = valTitle.substring(0, 13) + '...';
         ctx.fillText(valTitle, startX + 12, startY + 22);
@@ -259,31 +262,31 @@ export async function generateCanvasCard(params: {
     roundRectBorder(32, footY, 32, 32, 10, progressGrad);
     // Logo icon text is always white
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = '900 14px Inter';
+    ctx.font = '900 14px "Google Sans Flex", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('✦', 48, footY + 8); // optical center offset
 
     ctx.textAlign = 'left';
     ctx.fillStyle = c.textPrimary;
-    ctx.font = '900 11px Inter, sans-serif';
+    ctx.font = '900 11px "Google Sans Flex", sans-serif';
     ctx.letterSpacing = '2px';
     ctx.fillText('OOX HUB', 74, footY + 4);
 
     ctx.fillStyle = c.textTert;
-    ctx.font = 'bold 7px Inter, sans-serif';
+    ctx.font = 'bold 7px "Google Sans Flex", sans-serif';
     ctx.letterSpacing = '1px';
     ctx.fillText('GENESIS PROTOCOL', 74, footY + 20);
     ctx.letterSpacing = '0px';
 
     ctx.textAlign = 'right';
     ctx.fillStyle = c.textSec;
-    ctx.font = '900 8px Inter, sans-serif';
+    ctx.font = '900 8px "Google Sans Flex", sans-serif';
     ctx.letterSpacing = '1.5px';
     const floorStr = floorPrice && floorPrice > 0 ? `FLOOR: ${floorPrice.toFixed(2)} EGLD` : 'SECURED';
     ctx.fillText(floorStr.toUpperCase(), 528, footY + 6);
 
     ctx.fillStyle = c.copyRight; // More faded
-    ctx.font = 'bold 6px Inter, sans-serif';
+    ctx.font = 'bold 6px "Google Sans Flex", sans-serif';
     ctx.letterSpacing = '2px';
     ctx.fillText('© 2026 MULTIVERSX NETWORK', 528, footY + 20);
     ctx.letterSpacing = '0px';
