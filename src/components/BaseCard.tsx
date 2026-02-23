@@ -82,7 +82,7 @@ export function BaseCard({
         setImgError(false);
 
         let finalImage = image;
-        if (isExporting && image) {
+        if (isExporting && image && image.startsWith('http') && !image.startsWith('data:')) {
             finalImage = `/api/proxy-image?url=${encodeURIComponent(image)}${exportCb ? `&cb=${exportCb}` : ''}`;
         }
 
@@ -179,7 +179,7 @@ export function BaseCard({
                                         src={currentImage}
                                         alt="nft"
                                         className={`w-full h-full object-cover ${isExporting ? 'opacity-100' : `transition-opacity duration-500 ${imgLoading ? 'opacity-0' : 'opacity-100'}`}`}
-                                        crossOrigin={isExporting ? "anonymous" : undefined}
+                                        crossOrigin={isExporting && currentImage?.startsWith('http') ? "anonymous" : undefined}
                                         onLoad={() => setImgLoading(false)}
                                         onError={() => {
                                             if (fallbackImage && currentImage !== fallbackImage) {

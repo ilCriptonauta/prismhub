@@ -97,40 +97,37 @@ export default function CardsGeneratorPage() {
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         const timestamp = new Date().getTime().toString();
 
-        // Setting exportCb first ensures the URL we preload is EXACTLY the one the BaseCard will soon use
-        setExportCb(timestamp);
-
-        // Wait a tiny bit for React state to process exportCb
-        await new Promise(resolve => setTimeout(resolve, 50));
-
-        setIsExporting(true); // Switch to proxy images for CORS
-
         try {
             const fileName = `oox-card-${selectedNft?.name.replace(/\s+/g, '-').toLowerCase() || "creative"}.png`;
 
-            // THE SECRET SAUCE: Fetch the image and convert to Base64 BEFORE capturing
-            // This makes the image "local" to the browser, bypassing ALL CORS/Safari Tainted Canvas logic
+            // 1. Enter export mode first
+            setIsExporting(true);
+            setExportCb(timestamp);
+
+            // 2. Convert to Base64 BEFORE capturing
+            // This is the only way to be 100% sure Safari won't block the image during capture
             if (selectedNft.url.startsWith('http')) {
                 const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(selectedNft.url)}&cb=${timestamp}`;
                 const response = await fetch(proxyUrl);
                 if (!response.ok) throw new Error("Failed to fetch image via proxy");
 
                 const blob = await response.blob();
-                const reader = new FileReader();
-                const b64Promise = new Promise<string>((resolve, reject) => {
+                const b64 = await new Promise<string>((resolve, reject) => {
+                    const reader = new FileReader();
                     reader.onloadend = () => resolve(reader.result as string);
                     reader.onerror = reject;
+                    reader.readAsDataURL(blob);
                 });
-                reader.readAsDataURL(blob);
-                const b64 = await b64Promise;
+
                 setBase64Image(b64);
+
+                // CRITICAL: Give React a chance to render the Base64 string into the img tag
+                // and for the browser to decode it.
+                await new Promise(resolve => setTimeout(resolve, isIOS ? 1000 : 300));
             }
 
-            // Sync states for export mode
-            setIsExporting(true);
-
-            // Longer wait for iOS to ensure the base64 image is painted
-            await new Promise(resolve => setTimeout(resolve, isIOS ? 1200 : 400));
+            // 3. Final wait to ensure layout stability
+            await new Promise(resolve => setTimeout(resolve, isIOS ? 500 : 100));
 
             const dataUrl = await toPng(cardRef.current, {
                 cacheBust: true,
@@ -140,7 +137,7 @@ export default function CardsGeneratorPage() {
                     transform: "none",
                 },
                 filter: (node: any) => {
-                    const exclusionClasses = ['blur-3xl', 'animate-pulse'];
+                    const exclusionClasses = ['blur-3xl', 'animate-pulse', 'animate-spin'];
                     if (node.classList) {
                         return !exclusionClasses.some(cls => node.classList.contains(cls));
                     }
@@ -148,9 +145,8 @@ export default function CardsGeneratorPage() {
                 }
             });
 
-            // Handle the download
+            // 4. Handle the download
             if (isIOS) {
-                // On iOS Safari, we try the Share API first, then fallback to current tab preview
                 if (navigator.share) {
                     try {
                         const blob = await (await fetch(dataUrl)).blob();
@@ -160,8 +156,7 @@ export default function CardsGeneratorPage() {
                             title: 'OOX Hub Card',
                         });
                     } catch (shareErr) {
-                        // If sharing is cancelled, we do nothing to stay on page
-                        console.log("Share cancelled or failed", shareErr);
+                        // User cancelled or share failed
                         window.open(dataUrl, '_blank');
                     }
                 } else {
@@ -178,11 +173,12 @@ export default function CardsGeneratorPage() {
         } catch (err: any) {
             console.error("Failed to download card:", err);
             const errorMsg = err instanceof Error ? err.message : String(err);
-            alert(`Export failed: ${errorMsg}. This is usually due to CORS restrictions.`);
+            alert(`Export failed: ${errorMsg}.`);
         } finally {
             setIsDownloading(false);
-            setIsExporting(false); // Switch back to original images for display
+            setIsExporting(false);
             setExportCb(undefined);
+            setBase64Image(null);
         }
     }, [selectedNft]);
 
