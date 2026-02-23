@@ -280,145 +280,135 @@ export default function CardsGeneratorPage() {
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col items-center gap-6">
-                                        <div className="flex justify-center gap-4 sm:gap-6 w-full">
-                                            <Button
-                                                variant="outline"
-                                                size="lg"
-                                                onClick={() => setIsSelectionOpen(true)}
-                                                className="flex-1 rounded-2xl border-border px-6 py-7 font-bold hover:bg-surface transition-all flex items-center justify-center gap-2"
-                                            >
-                                                <RefreshCw className="w-5 h-5" /> {selectedNft ? "CHANGE" : "CHOOSE"} NFT
-                                            </Button>
-                                            <Button
-                                                variant="default"
-                                                size="lg"
-                                                disabled={isDownloading || !selectedNft}
-                                                onClick={handleDownload}
-                                                className="flex-[2] rounded-2xl px-8 py-7 font-bold shadow-2xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
-                                            >
-                                                {isDownloading ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5 mr-2" />}
-                                                DOWNLOAD PNG
-                                            </Button>
-                                        </div>
-                                        {!selectedNft && (
-                                            <motion.p
-                                                animate={{ opacity: [0.4, 1, 0.4] }}
-                                                transition={{ repeat: Infinity, duration: 2 }}
-                                                className="text-primary font-black uppercase tracking-[0.2em] text-[10px]"
-                                            >
-                                                Click the lightning icon to begin
-                                            </motion.p>
-                                        )}
-                                    </div>
-                                </motion.div>
-
-                                {/* Selection Proxy Info */}
-                                <AnimatePresence>
-                                    {isSelectionOpen && (
-                                        <motion.div
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
+                                    <div className="flex flex-col items-center gap-6 w-full">
+                                        <Button
+                                            variant="default"
+                                            size="lg"
+                                            disabled={isDownloading || !selectedNft}
+                                            onClick={handleDownload}
+                                            className="w-full rounded-2xl px-8 py-7 font-bold shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                                         >
-                                            <div
-                                                className="absolute inset-0 bg-background/80 backdrop-blur-xl"
-                                                onClick={() => setIsSelectionOpen(false)}
-                                            />
-
-                                            <motion.div
-                                                initial={{ scale: 0.9, y: 20 }}
-                                                animate={{ scale: 1, y: 0 }}
-                                                exit={{ scale: 0.9, y: 20 }}
-                                                className="relative w-full max-w-5xl bg-surface border border-border/50 rounded-[40px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
-                                            >
-                                                {/* Modal Header */}
-                                                <div className="p-8 border-b border-border/30 flex flex-col md:flex-row justify-between items-center gap-6 bg-surface/50">
-                                                    <div className="space-y-1">
-                                                        <h3 className="text-2xl font-black text-text-primary uppercase tracking-tight">Select your NFT</h3>
-                                                        <p className="text-text-secondary text-sm">Choose the digital asset to transform into a high-res card</p>
-                                                    </div>
-                                                    <div className="flex items-center gap-4 w-full md:w-auto">
-                                                        <div className="relative flex-grow md:w-80">
-                                                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
-                                                            <input
-                                                                type="text"
-                                                                placeholder="Search..."
-                                                                value={searchQuery}
-                                                                onChange={(e) => setSearchQuery(e.target.value)}
-                                                                className="w-full bg-background border border-border rounded-2xl py-3 pl-12 pr-6 outline-none focus:ring-2 focus:ring-primary/20"
-                                                            />
-                                                        </div>
-                                                        <button
-                                                            onClick={() => setIsSelectionOpen(false)}
-                                                            className="p-3 hover:bg-white/5 rounded-full transition-colors font-bold"
-                                                        >
-                                                            <X className="w-6 h-6 text-text-tertiary" />
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-                                                {/* Modal Content - NFT Grid */}
-                                                <div className="p-8 overflow-y-auto custom-scrollbar">
-                                                    {isLoadingNfts ? (
-                                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                                                            {Array(10).fill(0).map((_, i) => (
-                                                                <div key={i} className="aspect-square bg-background border border-border/50 rounded-3xl animate-pulse" />
-                                                            ))}
-                                                        </div>
-                                                    ) : filteredNfts.length > 0 ? (
-                                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                                                            {filteredNfts.map((nft) => (
-                                                                <div
-                                                                    key={nft.identifier}
-                                                                    onClick={() => {
-                                                                        setSelectedNft(nft);
-                                                                        setIsSelectionOpen(false);
-                                                                    }}
-                                                                    className={`bg-background border rounded-3xl overflow-hidden cursor-pointer group transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98] ${selectedNft?.identifier === nft.identifier ? 'border-primary ring-2 ring-primary/20' : 'border-border/50 hover:border-primary/40'}`}
-                                                                >
-                                                                    <div className="aspect-square overflow-hidden relative">
-                                                                        <img
-                                                                            src={nft.url}
-                                                                            alt={nft.name}
-                                                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                                                        />
-                                                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                                                                            <span className="text-[10px] font-black text-white uppercase tracking-widest">USE THIS</span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="p-4 space-y-2">
-                                                                        <div className="flex justify-between items-start">
-                                                                            <p className="text-[10px] font-black text-text-tertiary uppercase truncate">{nft.collection}</p>
-                                                                            {allVotes[nft.identifier] > 0 && (
-                                                                                <span className="text-[10px] font-black text-primary italic">
-                                                                                    LVL {Math.floor((allVotes[nft.identifier] * 10) / 250)}
-                                                                                </span>
-                                                                            )}
-                                                                        </div>
-                                                                        <p className="text-sm font-bold text-text-primary truncate">{nft.name}</p>
-                                                                        <div className="flex items-center gap-1.5 opacity-60">
-                                                                            <XpIcon className="w-3 h-3 text-primary" />
-                                                                            <span className="text-[10px] font-bold text-text-secondary">{(allVotes[nft.identifier] || 0) * 10} XP</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    ) : (
-                                                        <div className="text-center py-20 space-y-4">
-                                                            <Search className="w-12 h-12 text-text-tertiary mx-auto opacity-20" />
-                                                            <p className="text-text-secondary text-lg">No NFTs found</p>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </motion.div>
-                                        </motion.div>
+                                            {isDownloading ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />}
+                                            {isDownloading ? "Capturing..." : "DOWNLOAD PNG"}
+                                        </Button>
+                                    </div>
+                                    {!selectedNft && (
+                                        <motion.p
+                                            animate={{ opacity: [0.4, 1, 0.4] }}
+                                            transition={{ repeat: Infinity, duration: 2 }}
+                                            className="text-primary font-black uppercase tracking-[0.2em] text-[10px]"
+                                        >
+                                            Click the lightning icon to begin
+                                        </motion.p>
                                     )}
-                                </AnimatePresence>
+                                </motion.div>
                             </div>
                         )}
+
+                        {/* Selection Proxy Info */}
+                        <AnimatePresence>
+                            {isSelectionOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
+                                >
+                                    <div
+                                        className="absolute inset-0 bg-background/80 backdrop-blur-xl"
+                                        onClick={() => setIsSelectionOpen(false)}
+                                    />
+
+                                    <motion.div
+                                        initial={{ scale: 0.9, y: 20 }}
+                                        animate={{ scale: 1, y: 0 }}
+                                        exit={{ scale: 0.9, y: 20 }}
+                                        className="relative w-full max-w-5xl bg-surface border border-border/50 rounded-[40px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+                                    >
+                                        {/* Modal Header */}
+                                        <div className="p-8 border-b border-border/30 flex flex-col md:flex-row justify-between items-center gap-6 bg-surface/50">
+                                            <div className="space-y-1">
+                                                <h3 className="text-2xl font-black text-text-primary uppercase tracking-tight">Select your NFT</h3>
+                                                <p className="text-text-secondary text-sm">Choose the digital asset to transform into a high-res card</p>
+                                            </div>
+                                            <div className="flex items-center gap-4 w-full md:w-auto">
+                                                <div className="relative flex-grow md:w-80">
+                                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Search..."
+                                                        value={searchQuery}
+                                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                                        className="w-full bg-background border border-border rounded-2xl py-3 pl-12 pr-6 outline-none focus:ring-2 focus:ring-primary/20"
+                                                    />
+                                                </div>
+                                                <button
+                                                    onClick={() => setIsSelectionOpen(false)}
+                                                    className="p-3 hover:bg-white/5 rounded-full transition-colors font-bold"
+                                                >
+                                                    <X className="w-6 h-6 text-text-tertiary" />
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Modal Content - NFT Grid */}
+                                        <div className="p-8 overflow-y-auto custom-scrollbar">
+                                            {isLoadingNfts ? (
+                                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                                                    {Array(10).fill(0).map((_, i) => (
+                                                        <div key={i} className="aspect-square bg-background border border-border/50 rounded-3xl animate-pulse" />
+                                                    ))}
+                                                </div>
+                                            ) : filteredNfts.length > 0 ? (
+                                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                                                    {filteredNfts.map((nft) => (
+                                                        <div
+                                                            key={nft.identifier}
+                                                            onClick={() => {
+                                                                setSelectedNft(nft);
+                                                                setIsSelectionOpen(false);
+                                                            }}
+                                                            className={`bg-background border rounded-3xl overflow-hidden cursor-pointer group transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98] ${selectedNft?.identifier === nft.identifier ? 'border-primary ring-2 ring-primary/20' : 'border-border/50 hover:border-primary/40'}`}
+                                                        >
+                                                            <div className="aspect-square overflow-hidden relative">
+                                                                <img
+                                                                    src={nft.url}
+                                                                    alt={nft.name}
+                                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                                />
+                                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                                                                    <span className="text-[10px] font-black text-white uppercase tracking-widest">USE THIS</span>
+                                                                </div>
+                                                            </div>
+                                                            <div className="p-4 space-y-2">
+                                                                <div className="flex justify-between items-start">
+                                                                    <p className="text-[10px] font-black text-text-tertiary uppercase truncate">{nft.collection}</p>
+                                                                    {allVotes[nft.identifier] > 0 && (
+                                                                        <span className="text-[10px] font-black text-primary italic">
+                                                                            LVL {Math.floor((allVotes[nft.identifier] * 10) / 250)}
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                <p className="text-sm font-bold text-text-primary truncate">{nft.name}</p>
+                                                                <div className="flex items-center gap-1.5 opacity-60">
+                                                                    <XpIcon className="w-3 h-3 text-primary" />
+                                                                    <span className="text-[10px] font-bold text-text-secondary">{(allVotes[nft.identifier] || 0) * 10} XP</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="text-center py-20 space-y-4">
+                                                    <Search className="w-12 h-12 text-text-tertiary mx-auto opacity-20" />
+                                                    <p className="text-text-secondary text-lg">No NFTs found</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </motion.div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
 
                     {/* Features Section */}
