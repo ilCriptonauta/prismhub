@@ -24,68 +24,118 @@ export interface NFT {
 }
 
 const API_URL = "https://api.multiversx.com";
+const PAGE_SIZE = 100; // Max supported by the MultiversX API per call
+
+function processNft(nft: any): NFT {
+    let resolvedUrl = nft.url;
+
+    // If url is missing or an ipfs link, try to resolve it
+    if (!resolvedUrl || resolvedUrl.startsWith("ipfs://")) {
+        const cid = resolvedUrl?.replace("ipfs://", "");
+        if (cid) {
+            resolvedUrl = `https://ipfs.io/ipfs/${cid}`;
+        } else if (nft.media && nft.media.length > 0) {
+            const imgMedia =
+                nft.media.find((m: any) => m.fileType?.startsWith("image")) ||
+                nft.media[0];
+            resolvedUrl = imgMedia.url;
+        }
+    }
+
+    const workingUrl = resolvedUrl || nft.thumbnailUrl;
+
+    return {
+        ...nft,
+        url: workingUrl,
+        gatewayUrl: `https://media.multiversx.com/nfts/asset/${nft.identifier}`,
+        resolvedUrl: workingUrl,
+    };
+}
 
 export function useUserNFTs() {
     const { address } = useGetAccountInfo();
     const [nfts, setNfts] = useState<NFT[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [loadedCount, setLoadedCount] = useState(0);
+    const [totalCount, setTotalCount] = useState(0);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchNFTs = async () => {
-            if (!address) {
-                setNfts([]);
-                return;
-            }
+        if (!address) {
+            setNfts([]);
+            setLoadedCount(0);
+            setTotalCount(0);
+            return;
+        }
 
+        let cancelled = false;
+
+        const fetchAllNFTs = async () => {
             setIsLoading(true);
             setError(null);
+            setNfts([]);
+            setLoadedCount(0);
+
             try {
-                // Fetch first 100 NFTs for the account
-                const response = await fetch(`${API_URL}/accounts/${address}/nfts?size=100`);
-                if (!response.ok) throw new Error("Failed to fetch NFTs");
-                const data = await response.json();
+                // Step 1: get the total count so we can show progress
+                const countRes = await fetch(
+                    `${API_URL}/accounts/${address}/nfts/count`
+                );
+                if (!countRes.ok) throw new Error("Failed to fetch NFT count");
+                const count: number = await countRes.json();
 
-                // Process NFTs to ensure best image URL and CORS compatibility
-                const processedData = data.map((nft: any) => {
-                    let resolvedUrl = nft.url;
+                if (cancelled) return;
+                setTotalCount(count);
 
-                    // If url is missing or an ipfs link, try to resolve it
-                    if (!resolvedUrl || resolvedUrl.startsWith('ipfs://')) {
-                        const cid = resolvedUrl?.replace('ipfs://', '');
-                        if (cid) {
-                            resolvedUrl = `https://ipfs.io/ipfs/${cid}`;
-                        } else if (nft.media && nft.media.length > 0) {
-                            // Find image type or use first
-                            const imgMedia = nft.media.find((m: any) => m.fileType?.startsWith('image')) || nft.media[0];
-                            resolvedUrl = imgMedia.url;
-                        }
+                if (count === 0) {
+                    setIsLoading(false);
+                    return;
+                }
+
+                // Step 2: fetch all pages in sequence
+                let allNfts: NFT[] = [];
+                let from = 0;
+
+                while (from < count) {
+                    if (cancelled) return;
+
+                    const res = await fetch(
+                        `${API_URL}/accounts/${address}/nfts?size=${PAGE_SIZE}&from=${from}`
+                    );
+                    if (!res.ok) throw new Error("Failed to fetch NFTs");
+                    const page: any[] = await res.json();
+
+                    if (page.length === 0) break; // safety guard
+
+                    const processed = page.map(processNft);
+                    allNfts = [...allNfts, ...processed];
+
+                    if (!cancelled) {
+                        // Progressively update the list so the UI can show NFTs as they load
+                        setNfts([...allNfts]);
+                        setLoadedCount(allNfts.length);
                     }
 
-                    const workingUrl = resolvedUrl || nft.thumbnailUrl;
-
-                    return {
-                        ...nft,
-                        // url is used for the grid - MUST be the working one
-                        url: workingUrl,
-                        // gatewayUrl is for potential high-res in the card
-                        gatewayUrl: `https://media.multiversx.com/nfts/asset/${nft.identifier}`,
-                        // resolvedUrl is the fallback
-                        resolvedUrl: workingUrl
-                    };
-                });
-
-                setNfts(processedData);
+                    from += PAGE_SIZE;
+                }
             } catch (err: any) {
-                console.error("Error fetching NFTs:", err);
-                setError(err.message);
+                if (!cancelled) {
+                    console.error("Error fetching NFTs:", err);
+                    setError(err.message);
+                }
             } finally {
-                setIsLoading(false);
+                if (!cancelled) {
+                    setIsLoading(false);
+                }
             }
         };
 
-        fetchNFTs();
+        fetchAllNFTs();
+
+        return () => {
+            cancelled = true;
+        };
     }, [address]);
 
-    return { nfts, isLoading, error };
+    return { nfts, isLoading, loadedCount, totalCount, error };
 }

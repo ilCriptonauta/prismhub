@@ -118,3 +118,4 @@ Come ottenere i punti xp?
 
 I punti xp dovranno essere dedotti dai voti che gli nfts prendono sul marketplace OOX. Più un singolo NFTs ha voti, più punti xp ha la carta. 
 fonte da cui trarre ispirazione
+      
